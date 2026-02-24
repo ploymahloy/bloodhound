@@ -1,4 +1,3 @@
-import { forwardRef } from 'react'
 import { cn } from '../lib/cn'
 
 export type TextareaState = 'default' | 'success' | 'error'
@@ -6,6 +5,7 @@ export type TextareaState = 'default' | 'success' | 'error'
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   state?: TextareaState
+  ref?: React.Ref<HTMLTextAreaElement>
 }
 
 const stateClass: Record<TextareaState, string> = {
@@ -14,16 +14,17 @@ const stateClass: Record<TextareaState, string> = {
   error: 'uk-input--error',
 }
 
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, state = 'default', ...props }, ref) => {
-    return (
-      <textarea
-        ref={ref}
-        className={cn('uk-textarea', stateClass[state], className)}
-        {...props}
-      />
-    )
-  }
-)
-
-Textarea.displayName = 'Textarea'
+export function Textarea({
+  className,
+  state = 'default',
+  ref,
+  ...props
+}: TextareaProps) {
+  return (
+    <textarea
+      ref={ref}
+      className={cn('uk-textarea', stateClass[state], className)}
+      {...props}
+    />
+  )
+}

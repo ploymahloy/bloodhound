@@ -1,4 +1,3 @@
-import { forwardRef } from 'react'
 import { cn } from '../lib/cn'
 
 export interface SelectOption {
@@ -13,6 +12,7 @@ export interface SelectProps
     'children'
   > {
   options: SelectOption[] | string[]
+  ref?: React.Ref<HTMLSelectElement>
 }
 
 function normalizeOptions(
@@ -23,23 +23,24 @@ function normalizeOptions(
   )
 }
 
-export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, options, ...props }, ref) => {
-    const items = normalizeOptions(options)
-    return (
-      <select
-        ref={ref}
-        className={cn('uk-select', className)}
-        {...props}
-      >
-        {items.map(({ value, label, disabled }) => (
-          <option key={value} value={value} disabled={disabled}>
-            {label}
-          </option>
-        ))}
-      </select>
-    )
-  }
-)
-
-Select.displayName = 'Select'
+export function Select({
+  className,
+  options,
+  ref,
+  ...props
+}: SelectProps) {
+  const items = normalizeOptions(options)
+  return (
+    <select
+      ref={ref}
+      className={cn('uk-select', className)}
+      {...props}
+    >
+      {items.map(({ value, label, disabled }) => (
+        <option key={value} value={value} disabled={disabled}>
+          {label}
+        </option>
+      ))}
+    </select>
+  )
+}
