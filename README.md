@@ -17,7 +17,7 @@ Then open the URL shown (e.g. http://localhost:5173). The app in `src/App.tsx` d
 
 ```tsx
 import { Button, Input, Field } from './components'
-import '../css/ui-kit.css'  // or import in your root entry
+import './theme.css'  // or import in your root entry
 
 <Button variant="primary">Save</Button>
 <Field label="Email" htmlFor="email">
@@ -30,7 +30,7 @@ import '../css/ui-kit.css'  // or import in your root entry
 Link the stylesheet and use the class names:
 
 ```html
-<link rel="stylesheet" href="css/ui-kit.css" />
+<link rel="stylesheet" href="./theme.css" />
 <button class="uk-btn uk-btn--primary">Primary</button>
 ```
 
@@ -38,7 +38,7 @@ Open `demo.html` in a browser to see all CSS-only components.
 
 ## File structure
 
-- **`css/ui-kit.css`** — Design tokens and component classes (used by both HTML and React)
+- **`src/theme.css`** — Design tokens and component classes (theme + UI styles)
 - **`src/components/`** — React TypeScript components (Button, Input, Field, etc.)
 - **`src/components/index.ts`** — Barrel export for `import { Button, ... } from './components'`
 - **`src/App.tsx`** — Demo app using all components
