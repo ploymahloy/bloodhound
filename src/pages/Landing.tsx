@@ -1,50 +1,53 @@
-import { Link as RouterLink } from 'react-router-dom'
-import { Button } from '../components'
+import { Search } from 'lucide-react'
+import { useState } from 'react'
+import { Button, Input } from '../components'
 import './Landing.css'
 
+const HERO_CATEGORIES = [
+  'Bandmates. ',
+  'Mixing Engineers. ',
+  'Venues. ',
+  'Gear Rental. ',
+] as const
+
 function Landing() {
+  const [location, setLocation] = useState('')
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Placeholder: wire to search/navigation later
+  }
+
   return (
     <div className="landing-page">
-      <header className="landing-hero">
-        <h1 className="landing-title">Music Network</h1>
-        <div className="landing-accent-line" aria-hidden />
-        <p className="landing-tagline">
-          Connect with artists, discover new sounds, and build your music
-          community in one place.
-        </p>
-        <div className="landing-cta-wrap">
-          <RouterLink to="/login">
-            <Button variant="primary" size="lg" className="landing-cta">
-              Get started
+      <main className="landing-main">
+        <div className="landing-hero">
+          <h1 className="landing-hero-title">
+            {HERO_CATEGORIES.map((label) => (
+              <span key={label}>{label}</span>
+            ))}
+          </h1>
+          <form
+            className="landing-search"
+            onSubmit={handleSearch}
+            role="search"
+            aria-label="Search by location"
+          >
+            <Input
+              type="text"
+              name="location"
+              className="landing-search-input"
+              placeholder="Enter city, neighborhood, or address"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              aria-label="Location"
+            />
+            <Button type="submit" className="landing-search-btn" variant="ghost" aria-label="Search">
+              <Search size={20} aria-hidden />
             </Button>
-          </RouterLink>
-          <Button variant="outline" size="lg">
-            Learn more
-          </Button>
+          </form>
         </div>
-      </header>
-
-      <section className="landing-cards">
-        <article className="landing-card">
-          <h3>For artists</h3>
-          <p>
-            Share your work, grow your audience, and collaborate with other
-            creators.
-          </p>
-        </article>
-        <article className="landing-card">
-          <h3>For listeners</h3>
-          <p>
-            Discover new music, follow your favorites, and stay in the loop.
-          </p>
-        </article>
-        <article className="landing-card">
-          <h3>Together</h3>
-          <p>
-            One network for everyone who loves music.
-          </p>
-        </article>
-      </section>
+      </main>
     </div>
   )
 }
