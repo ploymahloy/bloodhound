@@ -1,5 +1,5 @@
 import { Button } from '../components'
-import '../Landing.css'
+import './Landing.css'
 
 function Landing() {
   return (
