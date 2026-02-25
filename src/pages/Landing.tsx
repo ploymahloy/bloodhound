@@ -1,3 +1,4 @@
+import { Link as RouterLink } from 'react-router-dom'
 import { Button } from '../components'
 import './Landing.css'
 
@@ -12,9 +13,11 @@ function Landing() {
           community in one place.
         </p>
         <div className="landing-cta-wrap">
-          <Button variant="primary" size="lg" className="landing-cta">
-            Get started
-          </Button>
+          <RouterLink to="/login">
+            <Button variant="primary" size="lg" className="landing-cta">
+              Get started
+            </Button>
+          </RouterLink>
           <Button variant="outline" size="lg">
             Learn more
           </Button>
