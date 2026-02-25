@@ -1,4 +1,4 @@
-import { cn } from '../lib/cn'
+import { cn } from '../utils/cn'
 
 export type InputState = 'default' | 'success' | 'error'
 

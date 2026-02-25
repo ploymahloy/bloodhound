@@ -1,4 +1,4 @@
-import { cn } from '../lib/cn'
+import { cn } from '../utils/cn'
 
 export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode

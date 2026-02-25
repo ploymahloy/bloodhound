@@ -1,4 +1,4 @@
-import { cn } from '../lib/cn'
+import { cn } from '../utils/cn'
 
 export interface RadioProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
