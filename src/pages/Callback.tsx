@@ -20,7 +20,7 @@ function Callback() {
 
   return (
     <div className="auth-callback">
-      <p className="auth-callback__message">Signing you in…</p>
+      <span className="loader"></span>
     </div>
   )
 }
