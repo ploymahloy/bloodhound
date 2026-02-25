@@ -1,7 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import Landing from './pages/Landing.tsx'
-import Auth from './pages/Auth.tsx'
-import Callback from './pages/Callback.tsx'
+import { Auth, Callback, Landing } from './pages'
 
 function App() {
   return (
