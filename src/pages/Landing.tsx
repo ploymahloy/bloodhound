@@ -1,6 +1,5 @@
-import { Search } from 'lucide-react'
-import { useState } from 'react'
-import { Button, Input } from '../components'
+import { useEffect, useRef, useState } from 'react'
+import { useGoogleMapsScript } from '../hooks/useGoogleMapsScript'
 import './Landing.css'
 
 const HERO_CATEGORIES = [
@@ -10,11 +9,48 @@ const HERO_CATEGORIES = [
   'Gear Rental. ',
 ] as const
 
+const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string
+
 function Landing() {
   const [location, setLocation] = useState('')
+  const autocompleteContainerRef = useRef<HTMLDivElement>(null)
+  const { loaded: mapsLoaded } = useGoogleMapsScript(googleMapsApiKey)
+
+  useEffect(() => {
+    if (!mapsLoaded || !autocompleteContainerRef.current || typeof google === 'undefined') return
+    const container = autocompleteContainerRef.current
+    const { PlaceAutocompleteElement } = google.maps.places
+    const autocomplete = new PlaceAutocompleteElement({})
+    if ('placeholder' in autocomplete) {
+      (autocomplete as { placeholder: string }).placeholder =
+        'Enter city, neighborhood, or address'
+    }
+    const handleSelect = async (e: Event) => {
+      const ev = e as unknown as {
+        placePrediction: {
+          toPlace: () =>
+            | Promise<{ fetchFields: (opts: { fields: string[] }) => Promise<void>; formattedAddress?: string; displayName?: string }>
+            | { fetchFields: (opts: { fields: string[] }) => Promise<void>; formattedAddress?: string; displayName?: string };
+        };
+      }
+      const place = await Promise.resolve(ev.placePrediction.toPlace())
+      await place.fetchFields({
+        fields: ['displayName', 'formattedAddress'],
+      })
+      const text = place.formattedAddress ?? place.displayName ?? ''
+      if (text) setLocation(text)
+    }
+    autocomplete.addEventListener('gmp-select', handleSelect)
+    container.appendChild(autocomplete)
+    return () => {
+      autocomplete.removeEventListener('gmp-select', handleSelect)
+      autocomplete.remove()
+    }
+  }, [mapsLoaded])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
+    if (!location.trim()) return
     // Placeholder: wire to search/navigation later
   }
 
@@ -33,18 +69,11 @@ function Landing() {
             role="search"
             aria-label="Search by location"
           >
-            <Input
-              type="text"
-              name="location"
+            <div
+              ref={autocompleteContainerRef}
               className="landing-search-input"
-              placeholder="Enter city, neighborhood, or address"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
               aria-label="Location"
             />
-            <Button type="submit" className="landing-search-btn" variant="ghost" aria-label="Search">
-              <Search size={20} aria-hidden />
-            </Button>
           </form>
         </div>
       </main>
