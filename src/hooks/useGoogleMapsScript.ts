@@ -39,6 +39,7 @@ function loadScript(apiKey: string): Promise<void> {
           return
         }
         await g.maps.importLibrary('places')
+        await g.maps.importLibrary('geocoding')
         delete (window as unknown as Record<string, unknown>)[callbackName]
         resolve()
       } catch (err) {
