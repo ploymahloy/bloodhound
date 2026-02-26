@@ -46,7 +46,9 @@ function Landing() {
     const autocomplete = new PlaceAutocompleteElement({})
     setPlaceholderIfSupported(autocomplete, 'Enter city, neighborhood, or address')
     const handleSelect = async (e: Event) => {
-      const ev = (e as CustomEvent<GmpSelectEventDetail>).detail
+      const ev: GmpSelectEventDetail =
+        (e as CustomEvent<GmpSelectEventDetail>).detail ?? (e as unknown as GmpSelectEventDetail)
+      if (!ev?.placePrediction) return
       const place = await Promise.resolve(ev.placePrediction.toPlace())
       await place.fetchFields({
         fields: ['displayName', 'formattedAddress'],
