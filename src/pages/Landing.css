@@ -61,6 +61,34 @@
   min-width: 0;
 }
 
+.landing-search-loading,
+.landing-search-error {
+  padding: 0.75rem 1rem;
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+}
+
+.landing-search-error {
+  color: var(--color-error);
+}
+
+.landing-search-error p {
+  margin: 0 0 0.5rem;
+}
+
+.landing-search-retry {
+  padding: 0.25rem 0.5rem;
+  font-size: inherit;
+  cursor: pointer;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm, 4px);
+}
+
+.landing-search-retry:hover {
+  background: var(--color-bg-hover, rgba(0, 0, 0, 0.05));
+}
+
 .pac-container {
   z-index: 1000;
   border-radius: var(--border-radius-md);
