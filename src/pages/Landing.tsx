@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useGoogleMapsScript } from '../hooks/useGoogleMapsScript'
 import { usePlaceAutocomplete } from '../hooks/usePlaceAutocomplete'
+import { fetchDataByCoordinates } from '../services/locationApi'
 import './Landing.css'
 
 const HERO_CATEGORIES = [
@@ -13,21 +14,27 @@ const HERO_CATEGORIES = [
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
 function Landing() {
-  const [location, setLocation] = useState('')
   const autocompleteContainerRef = useRef<HTMLDivElement>(null)
   const { loaded: mapsLoaded, error: mapsError } = useGoogleMapsScript(googleMapsApiKey)
 
   usePlaceAutocomplete(autocompleteContainerRef, mapsLoaded, {
-    onPlaceSelect: ({ addressText }) => {
-      setLocation(addressText)
+    onPlaceSelect: async ({ location: coords }) => {
+      if (!coords) return
+      try {
+        const data = await fetchDataByCoordinates({
+          latitude: coords.lat,
+          longitude: coords.lng,
+        })
+        console.log('Data: ', data)
+        // TODO: handle response (e.g. navigate, show results)
+        alert('Data: ' + JSON.stringify(data))
+      } catch (err) {
+        console.error('Location search failed', err)
+        // TODO: surface error to user via error modal
+        alert('Location search failed: ' + JSON.stringify(err))
+      }
     },
   })
-
-  const handleSearch = async (e: React.FormEvent) => {
-    console.log('search triggered')
-    e.preventDefault()
-    if (!location.trim()) return
-  }
 
   return (
     <div className="landing-page">
@@ -38,15 +45,8 @@ function Landing() {
               <span key={label}>{label}</span>
             ))}
           </h1>
-          <form
+          <div
             className="landing-search"
-            onSubmit={handleSearch}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault()
-                e.currentTarget.requestSubmit()
-              }
-            }}
             role="search"
             aria-label="Search by location"
           >
@@ -81,7 +81,7 @@ function Landing() {
                 </div>
               )}
             </div>
-          </form>
+          </div>
         </div>
       </main>
     </div>
