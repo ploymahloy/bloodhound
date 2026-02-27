@@ -36,9 +36,10 @@ export function usePlaceAutocomplete(
         fields: ['displayName', 'formattedAddress', 'location'],
       })
       const addressText = place.formattedAddress ?? place.displayName ?? ''
-      const location = extractLatLngFromPlaceLocation(place.location)
-      onPlaceSelectRef.current({ addressText, location })
-      console.log('Lat/Lng', location)
+      const coordinates = extractLatLngFromPlaceLocation(place.location)
+      onPlaceSelectRef.current({ addressText, location: coordinates })
+      console.log('Address: ', place.displayName)
+      console.log('Coordinates: ', coordinates)
     }
 
     autocomplete.addEventListener('gmp-select', handleSelect)
