@@ -26,6 +26,7 @@ export function usePlaceAutocomplete(
     const { PlaceAutocompleteElement } = google.maps.places
     const autocomplete = new PlaceAutocompleteElement({})
     setPlaceholderIfSupported(autocomplete, 'Enter city, neighborhood, or address')
+
     const handleSelect = async (e: Event) => {
       const ev: GmpSelectEventDetail =
         (e as CustomEvent<GmpSelectEventDetail>).detail ?? (e as unknown as GmpSelectEventDetail)
@@ -37,7 +38,9 @@ export function usePlaceAutocomplete(
       const addressText = place.formattedAddress ?? place.displayName ?? ''
       const location = extractLatLngFromPlaceLocation(place.location)
       onPlaceSelectRef.current({ addressText, location })
+      console.log('Lat/Lng', location)
     }
+
     autocomplete.addEventListener('gmp-select', handleSelect)
     container.appendChild(autocomplete)
     return () => {
