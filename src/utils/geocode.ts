@@ -18,24 +18,23 @@ export async function geocodeAddress(address: string): Promise<GeocodeResult | n
     return null
   }
   try {
-    const { Geocoder } = (await google.maps.importLibrary(
-      'geocoding'
-    )) as google.maps.GeocodingLibrary
-    const geocoder = new Geocoder()
+    const geocoder = new google.maps.Geocoder()
     const result = await geocoder.geocode({ address: address.trim() })
     const first = result.results?.[0]
     if (!first?.geometry?.location) return null
+
     const location = first.geometry.location
-    const lat: number =
-      typeof (location as google.maps.LatLng).lat === 'function'
-        ? (location as google.maps.LatLng).lat()
-        : (location as unknown as { lat: number }).lat
-    const lng: number =
-      typeof (location as google.maps.LatLng).lng === 'function'
-        ? (location as google.maps.LatLng).lng()
-        : (location as unknown as { lng: number }).lng
+    const lat = isLatLng(location) ? location.lat() : (location as unknown as { lat: number }).lat
+    const lng = isLatLng(location) ? location.lng() : (location as unknown as { lng: number }).lng
+
     return { lat, lng }
   } catch {
     return null
   }
+}
+
+function isLatLng(
+  value: google.maps.LatLng | { lat: () => number; lng: () => number }
+): value is google.maps.LatLng {
+  return value instanceof google.maps.LatLng
 }
