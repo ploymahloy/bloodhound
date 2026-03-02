@@ -1,12 +1,13 @@
 import { Routes, Route } from 'react-router-dom'
-import Landing from './pages/Landing.tsx'
+import { Home, SearchResults } from './pages'
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-    </Routes>
-  )
+	return (
+		<Routes>
+			<Route path="/" element={<Home />} />
+			<Route path="/search" element={<SearchResults />} />
+		</Routes>
+	);
 }
 
-export default App
+export default App;
