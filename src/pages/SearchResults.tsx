@@ -61,7 +61,7 @@ export function SearchResults() {
 	const results = city.trim() ? getMockResultsByCity(city) : [];
 
 	return (
-		<>
+		<div className='SearchResults-page'>
 			<form
 				className='SearchResults-form'
 				onSubmit={e => {
@@ -76,7 +76,7 @@ export function SearchResults() {
 			</form>
 
 			{city && (
-				<>
+				<div className='SearchResults-listContainer'>
 					<Text className='SearchResults-title'>Results for “{city}”</Text>
 					<div className='SearchResults-list'>
 						{results.map(item => (
@@ -94,10 +94,10 @@ export function SearchResults() {
 						))}
 					</div>
 					{results.length === 0 && <Text className='SearchResults-muted'>No results.</Text>}
-				</>
+				</div>
 			)}
 
 			{!city && <Text className='SearchResults-muted'>Enter a city and click Search to see results.</Text>}
-		</>
+		</div>
 	);
 }
