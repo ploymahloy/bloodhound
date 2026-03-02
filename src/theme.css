@@ -8,43 +8,43 @@
    ========================================================================== */
 
 :root {
-  /* Layout & Surfaces */
-  --color-bg-body: #0A0A0A;
-  --color-bg-surface: #1A1A1A;
-  --color-border: #2D2D2D;
-  --color-scrollbar: #2D2D2D;
-  --color-scrollbar-active: #00E5FF;
+	/* Layout & Surfaces */
+	--color-bg-body: #0a0a0a;
+	--color-bg-surface: #1a1a1a;
+	--color-border: #2d2d2d;
+	--color-scrollbar: #2d2d2d;
+	--color-scrollbar-active: #00e5ff;
 
-  /* Typography */
-  --color-text: #F5F5F5;
-  --color-text-heading: #F5F5F5;
-  --color-text-disabled: #555555;
-  --color-link: #00E5FF;
-  --color-link-hover: #00E5FF;
+	/* Typography */
+	--color-text: #f5f5f5;
+	--color-text-heading: #f5f5f5;
+	--color-text-disabled: #555555;
+	--color-link: #00e5ff;
+	--color-link-hover: #00e5ff;
 
-  /* Buttons & Accent */
-  --color-accent: #00E5FF;
-  --color-accent-hover: #4DEDFF;
-  --color-accent-glow: #00E5FF;
-  --color-primary-btn-text: #0A0A0A;
+	/* Buttons & Accent */
+	--color-accent: #00e5ff;
+	--color-accent-hover: #4dedff;
+	--color-accent-glow: #00e5ff;
+	--color-primary-btn-text: #0a0a0a;
 
-  /* Form focus */
-  --color-focus-ring: #00E5FF;
-  --color-focus-shadow: rgba(0, 229, 255, 0.5);
+	/* Form focus */
+	--color-focus-ring: #00e5ff;
+	--color-focus-shadow: rgba(0, 229, 255, 0.5);
 
-  /* Feedback */
-  --color-hover-bg: #2D2D2D;
-  --color-active-accent: #00E5FF;
-  --color-success: #00FFAD;
-  --color-error: #FF5252;
+	/* Feedback */
+	--color-hover-bg: #2d2d2d;
+	--color-active-accent: #00e5ff;
+	--color-success: #00ffad;
+	--color-error: #ff5252;
 
-  /* Spacing & Sizing */
-  --border-radius-sm: 4px;
-  --border-radius-md: 6px;
-  --border-radius-lg: 8px;
-  --accent-border-width: 3px;
-  --transition-fast: 0.15s ease;
-  --transition-normal: 0.2s ease;
+	/* Spacing & Sizing */
+	--border-radius-sm: 4px;
+	--border-radius-md: 6px;
+	--border-radius-lg: 8px;
+	--accent-border-width: 3px;
+	--transition-fast: 0.15s ease;
+	--transition-normal: 0.2s ease;
 }
 
 /* ==========================================================================
@@ -54,20 +54,27 @@
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: var(--color-bg-body);
-  color: var(--color-text);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	background-color: var(--color-bg-body);
+	color: var(--color-text);
+	font-family:
+		system-ui,
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		Roboto,
+		'Helvetica Neue',
+		Arial,
+		sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
 }
 
 /* ==========================================================================
@@ -76,76 +83,83 @@ body {
 
 /* Webkit (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+	width: 8px;
+	height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-body);
+	background: var(--color-bg-body);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-scrollbar);
-  border-radius: 4px;
+	background: var(--color-scrollbar);
+	border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover,
 ::-webkit-scrollbar-thumb:active {
-  background: var(--color-scrollbar-active);
+	background: var(--color-scrollbar-active);
 }
 
 /* Firefox */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-scrollbar) var(--color-bg-body);
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-scrollbar) var(--color-bg-body);
 }
 
 *:hover {
-  scrollbar-color: var(--color-scrollbar-active) var(--color-bg-body);
+	scrollbar-color: var(--color-scrollbar-active) var(--color-bg-body);
 }
 
 /* ==========================================================================
    4. TYPOGRAPHY
    ========================================================================== */
 
+/* prettier-ignore */
 h1, h2, h3, h4, h5, h6 {
-  margin: 0 0 0.5em;
-  color: var(--color-text-heading);
-  font-weight: 600;
-  line-height: 1.25;
+	margin: 0 0 0.5em;
+	color: var(--color-text-heading);
+	font-weight: 600;
+	line-height: 1.25;
 }
 
+/* prettier-ignore */
 h1 { font-size: 2rem; }
+/* prettier-ignore */
 h2 { font-size: 1.5rem; }
+/* prettier-ignore */
 h3 { font-size: 1.25rem; }
+/* prettier-ignore */
 h4 { font-size: 1.125rem; }
+/* prettier-ignore */
 h5 { font-size: 1rem; }
+/* prettier-ignore */
 h6 { font-size: 0.875rem; }
 
 p {
-  margin: 0 0 1em;
-  color: var(--color-text);
+	margin: 0 0 1em;
+	color: var(--color-text);
 }
 
 .text-disabled {
-  color: var(--color-text-disabled);
-  cursor: not-allowed;
+	color: var(--color-text-disabled);
+	cursor: not-allowed;
 }
 
 /* Links */
 a {
-  color: var(--color-link);
-  text-decoration: none;
-  transition: text-decoration var(--transition-fast);
+	color: var(--color-link);
+	text-decoration: none;
+	transition: text-decoration var(--transition-fast);
 }
 
 a:hover {
-  text-decoration: underline;
+	text-decoration: underline;
 }
 
 a:focus-visible {
-  outline: 2px solid var(--color-focus-ring);
-  outline-offset: 2px;
+	outline: 2px solid var(--color-focus-ring);
+	outline-offset: 2px;
 }
 
 /* ==========================================================================
@@ -154,28 +168,28 @@ a:focus-visible {
 
 .uk-header,
 .uk-sidebar {
-  background-color: var(--color-bg-surface);
+	background-color: var(--color-bg-surface);
 }
 
 .uk-sidebar {
-  min-width: 240px;
+	min-width: 240px;
 }
 
 .uk-divider,
 .uk-border {
-  border-color: var(--color-border);
+	border-color: var(--color-border);
 }
 
 .uk-divider {
-  border-width: 0;
-  border-top-width: 1px;
-  border-style: solid;
-  margin: 1rem 0;
+	border-width: 0;
+	border-top-width: 1px;
+	border-style: solid;
+	margin: 1rem 0;
 }
 
 .uk-border {
-  border-width: 1px;
-  border-style: solid;
+	border-width: 1px;
+	border-style: solid;
 }
 
 /* ==========================================================================
@@ -183,86 +197,85 @@ a:focus-visible {
    ========================================================================== */
 
 .uk-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  line-height: 1.5;
-  border: none;
-  border-radius: var(--border-radius-md);
-  cursor: pointer;
-  transition: background-color var(--transition-normal),
-    color var(--transition-normal),
-    box-shadow var(--transition-normal),
-    border-color var(--transition-normal);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	font-size: 0.9375rem;
+	font-weight: 500;
+	line-height: 1.5;
+	border: none;
+	border-radius: var(--border-radius-md);
+	cursor: pointer;
+	transition:
+		background-color var(--transition-normal),
+		color var(--transition-normal),
+		border-color var(--transition-normal);
 }
 
 .uk-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+	opacity: 0.6;
+	cursor: not-allowed;
 }
 
 .uk-btn:focus-visible {
-  outline: 2px solid var(--color-focus-ring);
-  outline-offset: 2px;
+	outline: 2px solid var(--color-focus-ring);
+	outline-offset: 2px;
 }
 
 /* Primary */
 .uk-btn--primary {
-  background-color: var(--color-accent);
-  color: var(--color-primary-btn-text);
+	background-color: var(--color-accent);
+	color: var(--color-primary-btn-text);
 }
 
 .uk-btn--primary:hover:not(:disabled) {
-  background-color: var(--color-accent-hover);
-  box-shadow: 0 0 15px var(--color-accent-glow);
+	background-color: var(--color-accent-hover);
 }
 
 .uk-btn--primary:active:not(:disabled) {
-  box-shadow: 0 0 8px var(--color-accent-glow);
+	box-shadow: 0 0 8px var(--color-accent-glow);
 }
 
 /* Outline */
 .uk-btn--outline {
-  background: transparent;
-  color: var(--color-accent);
-  border: 2px solid var(--color-accent);
+	background: transparent;
+	color: var(--color-accent);
+	border: 2px solid var(--color-accent);
 }
 
 .uk-btn--outline:hover:not(:disabled) {
-  background-color: rgba(0, 229, 255, 0.1);
+	background-color: rgba(0, 229, 255, 0.1);
 }
 
 .uk-btn--outline:active:not(:disabled) {
-  background-color: rgba(0, 229, 255, 0.15);
+	background-color: rgba(0, 229, 255, 0.15);
 }
 
 /* Ghost / Secondary */
 .uk-btn--ghost {
-  background: transparent;
-  color: var(--color-text);
+	background: transparent;
+	color: var(--color-text);
 }
 
 .uk-btn--ghost:hover:not(:disabled) {
-  background-color: var(--color-hover-bg);
+	background-color: var(--color-hover-bg);
 }
 
 .uk-btn--ghost:active:not(:disabled) {
-  background-color: var(--color-hover-bg);
+	background-color: var(--color-hover-bg);
 }
 
 /* Button sizes (optional) */
 .uk-btn--sm {
-  padding: 0.375rem 0.75rem;
-  font-size: 0.875rem;
+	padding: 0.375rem 0.75rem;
+	font-size: 0.875rem;
 }
 
 .uk-btn--lg {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
+	padding: 0.75rem 1.5rem;
+	font-size: 1rem;
 }
 
 /* ==========================================================================
@@ -272,118 +285,119 @@ a:focus-visible {
 .uk-input,
 .uk-textarea,
 .uk-select {
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.9375rem;
-  font-family: inherit;
-  color: var(--color-text);
-  background-color: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-md);
-  transition: border-color var(--transition-fast),
-    box-shadow var(--transition-fast);
+	width: 100%;
+	padding: 0.5rem 0.75rem;
+	font-size: 0.9375rem;
+	font-family: inherit;
+	color: var(--color-text);
+	background-color: var(--color-bg-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--border-radius-md);
+	transition:
+		border-color var(--transition-fast),
+		box-shadow var(--transition-fast);
 }
 
 .uk-input::placeholder,
 .uk-textarea::placeholder {
-  color: var(--color-text-disabled);
+	color: var(--color-text-disabled);
 }
 
 .uk-input:hover:not(:disabled):not(:focus),
 .uk-textarea:hover:not(:disabled):not(:focus),
 .uk-select:hover:not(:disabled):not(:focus) {
-  border-color: var(--color-border);
+	border-color: var(--color-border);
 }
 
 .uk-input:focus,
 .uk-textarea:focus,
 .uk-select:focus {
-  outline: none;
-  border-color: var(--color-focus-ring);
-  box-shadow: 0 0 5px var(--color-focus-shadow);
+	outline: none;
+	border-color: var(--color-focus-ring);
+	box-shadow: 0 0 5px var(--color-focus-shadow);
 }
 
 .uk-input:disabled,
 .uk-textarea:disabled,
 .uk-select:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  color: var(--color-text-disabled);
+	opacity: 0.7;
+	cursor: not-allowed;
+	color: var(--color-text-disabled);
 }
 
 .uk-textarea {
-  min-height: 100px;
-  resize: vertical;
+	min-height: 100px;
+	resize: vertical;
 }
 
 .uk-select {
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23F5F5F5' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  padding-right: 2rem;
+	cursor: pointer;
+	appearance: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23F5F5F5' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 0.75rem center;
+	padding-right: 2rem;
 }
 
 /* Checkbox & Radio */
 .uk-checkbox,
 .uk-radio {
-  --size: 1.25rem;
-  width: var(--size);
-  height: var(--size);
-  margin: 0 0.5rem 0 0;
-  accent-color: var(--color-accent);
-  cursor: pointer;
-  vertical-align: middle;
+	--size: 1.25rem;
+	width: var(--size);
+	height: var(--size);
+	margin: 0 0.5rem 0 0;
+	accent-color: var(--color-accent);
+	cursor: pointer;
+	vertical-align: middle;
 }
 
 .uk-radio {
-  border-radius: 50%;
+	border-radius: 50%;
 }
 
 /* Checkbox/Radio (checked state uses accent via accent-color) */
 .uk-checkbox:checked,
 .uk-radio:checked {
-  /* accent-color handles fill in modern browsers */
+	/* accent-color handles fill in modern browsers */
 }
 
 .uk-checkbox:focus-visible,
 .uk-radio:focus-visible {
-  outline: 2px solid var(--color-focus-ring);
-  outline-offset: 2px;
+	outline: 2px solid var(--color-focus-ring);
+	outline-offset: 2px;
 }
 
 .uk-label {
-  display: inline-flex;
-  align-items: center;
-  font-size: 0.9375rem;
-  color: var(--color-text);
-  cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	font-size: 0.9375rem;
+	color: var(--color-text);
+	cursor: pointer;
 }
 
 .uk-label:has(.uk-checkbox:disabled),
 .uk-label:has(.uk-radio:disabled) {
-  color: var(--color-text-disabled);
-  cursor: not-allowed;
+	color: var(--color-text-disabled);
+	cursor: not-allowed;
 }
 
 /* Field group spacing */
 .uk-field {
-  margin-bottom: 1rem;
+	margin-bottom: 1rem;
 }
 
 .uk-field__label {
-  display: block;
-  margin-bottom: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--color-text);
+	display: block;
+	margin-bottom: 0.25rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: var(--color-text);
 }
 
 .uk-field__hint {
-  margin-top: 0.25rem;
-  font-size: 0.8125rem;
-  color: var(--color-text-disabled);
+	margin-top: 0.25rem;
+	font-size: 0.8125rem;
+	color: var(--color-text-disabled);
 }
 
 /* ==========================================================================
@@ -392,62 +406,64 @@ a:focus-visible {
 
 /* General hover lift */
 .uk-hover-lift:hover {
-  background-color: var(--color-hover-bg);
-  transition: background-color var(--transition-fast);
+	background-color: var(--color-hover-bg);
+	transition: background-color var(--transition-fast);
 }
 
 /* Active / Selected — left border accent */
 .uk-active,
 .uk-selected {
-  border-left: var(--accent-border-width) solid var(--color-active-accent) !important;
+	border-left: var(--accent-border-width) solid var(--color-active-accent) !important;
 }
 
 /* Apply to list items or cards; add padding so content doesn't shift */
 .uk-item-active {
-  position: relative;
-  padding-left: calc(0.75rem + var(--accent-border-width));
-  border-left: var(--accent-border-width) solid transparent;
-  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+	position: relative;
+	padding-left: calc(0.75rem + var(--accent-border-width));
+	border-left: var(--accent-border-width) solid transparent;
+	transition:
+		border-color var(--transition-fast),
+		background-color var(--transition-fast);
 }
 
 .uk-item-active:hover {
-  background-color: var(--color-hover-bg);
+	background-color: var(--color-hover-bg);
 }
 
 .uk-item-active.is-active,
 .uk-item-active.is-selected {
-  border-left-color: var(--color-active-accent);
-  background-color: var(--color-hover-bg);
+	border-left-color: var(--color-active-accent);
+	background-color: var(--color-hover-bg);
 }
 
 /* Success state */
 .uk-state-success,
 .uk-message--success {
-  color: var(--color-success);
+	color: var(--color-success);
 }
 
 .uk-input.uk-input--success {
-  border-color: var(--color-success);
+	border-color: var(--color-success);
 }
 
 .uk-input.uk-input--success:focus {
-  box-shadow: 0 0 5px rgba(0, 255, 173, 0.5);
+	box-shadow: 0 0 5px rgba(0, 255, 173, 0.5);
 }
 
 /* Error state */
 .uk-state-error,
 .uk-message--error {
-  color: var(--color-error);
+	color: var(--color-error);
 }
 
 .uk-input.uk-input--error,
 .uk-textarea.uk-input--error {
-  border-color: var(--color-error);
+	border-color: var(--color-error);
 }
 
 .uk-input.uk-input--error:focus,
 .uk-textarea.uk-input--error:focus {
-  box-shadow: 0 0 5px rgba(255, 82, 82, 0.5);
+	box-shadow: 0 0 5px rgba(255, 82, 82, 0.5);
 }
 
 /* ==========================================================================
@@ -455,13 +471,13 @@ a:focus-visible {
    ========================================================================== */
 
 .uk-sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
 }
