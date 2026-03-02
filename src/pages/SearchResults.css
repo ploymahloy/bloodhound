@@ -67,6 +67,15 @@
 	border-radius: var(--border-radius-md);
 	border-left: var(--accent-border-width) solid var(--color-active-accent);
 	background: var(--color-bg-body);
+	cursor: pointer;
+	text-align: left;
+	width: 100%;
+}
+
+.SearchResults-listItem:focus-visible {
+	outline: none;
+	border-color: var(--color-active-accent);
+	box-shadow: 0 0 0 1px var(--color-active-accent);
 }
 
 .SearchResults-name {
@@ -143,6 +152,120 @@
 	margin-bottom: 16px;
 }
 
+.SearchResults-profileModalContent {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.SearchResults-profileModalHeader {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.SearchResults-profileTitleGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.SearchResults-profileName {
+	font-weight: 600;
+	font-size: 1rem;
+	margin: 0;
+}
+
+.SearchResults-profileType {
+	font-size: 0.875rem;
+	color: var(--color-text-disabled);
+	margin: 0;
+	text-transform: capitalize;
+}
+
+.SearchResults-profileContact {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 10px 12px;
+	border-radius: var(--border-radius-lg);
+	background: rgba(8, 47, 73, 0.9);
+	border: 1px solid rgba(56, 189, 248, 0.7);
+}
+
+.SearchResults-profileContactLine {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin: 0;
+	font-size: 0.9rem;
+}
+
+.SearchResults-profileContactLabel {
+	font-weight: 500;
+	color: var(--color-text-muted);
+}
+
+.SearchResults-profileContactLink {
+	color: var(--color-primary);
+	text-decoration: none;
+}
+
+.SearchResults-profileContactLink:hover {
+	text-decoration: underline;
+}
+
+.SearchResults-profilePromo {
+	padding: 10px 12px;
+	border-radius: var(--border-radius-lg);
+	background: rgba(8, 73, 8, 0.9);
+	border: 1px solid rgba(56, 248, 78, 0.7);
+}
+
+.SearchResults-profilePromoLabel {
+	margin: 0 0 4px;
+	font-size: 0.75rem;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var(--color-text-muted);
+}
+
+.SearchResults-profilePromoText {
+	margin: 0;
+	font-size: 0.9rem;
+}
+
+.SearchResults-profileServices {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.SearchResults-profileSectionTitle {
+	margin: 0;
+	font-weight: 500;
+	font-size: 0.95rem;
+}
+
+.SearchResults-profileServicesList {
+	margin: 0;
+	padding-left: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	font-size: 0.9rem;
+}
+
+.SearchResults-profileServiceItem {
+	margin: 0;
+}
+
+.SearchResults-profileServiceFallback {
+	margin: 0;
+	font-size: 0.9rem;
+	color: var(--color-text);
+}
+
 @media (max-width: 900px) {
 	.SearchResults-content {
 		flex-direction: column-reverse;
@@ -176,5 +299,21 @@
 	.SearchResults-mapContainer {
 		margin: 0;
 		min-height: 560px;
+	}
+
+	.SearchResults-profileModalContent {
+		gap: 14px;
+	}
+
+	.SearchResults-profileName {
+		font-size: 1.05rem;
+	}
+
+	.SearchResults-profileContact {
+		padding: 10px;
+	}
+
+	.SearchResults-profilePromo {
+		padding: 10px;
 	}
 }

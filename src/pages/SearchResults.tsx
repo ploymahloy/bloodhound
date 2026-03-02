@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Grid2x2, Map } from 'lucide-react';
-import { Button, Input, Text } from '../components';
+import { Button, Input, Modal, Text } from '../components';
 import { cn } from '../lib/cn';
 import './SearchResults.css';
 
@@ -10,9 +10,11 @@ export type SearchResultItem = {
 	name: string;
 	type: 'business' | 'individual';
 	service: string;
+	services?: string[];
 	address?: string;
 	phone: string;
 	avatarUrl?: string;
+	promo?: string;
 };
 
 function truncate(value: string, maxLength: number) {
@@ -27,26 +29,32 @@ function getMockResultsByCity(_city: string): SearchResultItem[] {
 			name: 'Riverside Sound Studio',
 			type: 'business',
 			service: 'Recording Studio',
+			services: ['Full-band tracking', 'Mixing & mastering', 'Podcast production'],
 			address: '124 Main St, Suite 200',
 			phone: '(555) 123-4567',
-			avatarUrl: undefined
+			avatarUrl: undefined,
+			promo: 'New artist special: 20% off your first full-day session.'
 		},
 		{
 			id: '2',
 			name: 'Alex Chen',
 			type: 'individual',
-			service: 'Trumpet',
+			service: 'Trumpet Player',
+			services: ['Session recording', 'Live performance', 'Private lessons'],
 			phone: '(555) 987-6543',
-			avatarUrl: undefined
+			avatarUrl: undefined,
+			promo: 'Now accepting new students for spring semester.'
 		},
 		{
 			id: '3',
 			name: 'Downtown Music Co.',
 			type: 'business',
 			service: 'Music Store',
+			services: ['Instrument sales', 'Repairs & maintenance', 'Accessory shop'],
 			address: '88 Oak Avenue',
 			phone: '(555) 246-8135',
-			avatarUrl: undefined
+			avatarUrl: undefined,
+			promo: 'Buy one set of strings, get the second half off.'
 		}
 	];
 }
@@ -65,6 +73,8 @@ function Avatar({ item }: { item: SearchResultItem }) {
 export function SearchResults() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [mobileView, setMobileView] = useState<'list' | 'map'>('list');
+	const [selectedProfile, setSelectedProfile] = useState<SearchResultItem | null>(null);
+	const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 	const city = searchParams.get('city') ?? '';
 	const results = city.trim() ? getMockResultsByCity(city) : [];
 	const displayCity = truncate(city, 25);
@@ -81,6 +91,21 @@ export function SearchResults() {
 		if (typeof window === 'undefined') return;
 		window.localStorage.setItem('searchResultsMobileView', mobileView);
 	}, [mobileView]);
+
+	useEffect(() => {
+		setIsProfileModalOpen(false);
+		setSelectedProfile(null);
+	}, [city]);
+
+	function openProfile(item: SearchResultItem) {
+		setSelectedProfile(item);
+		setIsProfileModalOpen(true);
+	}
+
+	function closeProfile() {
+		setIsProfileModalOpen(false);
+		setSelectedProfile(null);
+	}
 
 	return (
 		<div
@@ -127,7 +152,11 @@ export function SearchResults() {
 						<h1 className='SearchResults-title'>Results for “{displayCity}”</h1>
 						<div className='SearchResults-list'>
 							{results.map(item => (
-								<span key={item.id} className='uk-item-active uk-border SearchResults-listItem'>
+								<button
+									type='button'
+									key={item.id}
+									className='uk-item-active uk-border SearchResults-listItem'
+									onClick={() => openProfile(item)}>
 									<Avatar item={item} />
 									<div>
 										<Text className='SearchResults-name'>{item.name}</Text>
@@ -137,7 +166,7 @@ export function SearchResults() {
 										)}
 										<Text className='SearchResults-phone'>{item.phone}</Text>
 									</div>
-								</span>
+								</button>
 							))}
 						</div>
 						{results.length === 0 && <Text className='SearchResults-muted'>No results.</Text>}
@@ -150,6 +179,60 @@ export function SearchResults() {
 			)}
 
 			{!city && <Text className='SearchResults-muted'>Enter a city and click Search to see results.</Text>}
+
+			<Modal
+				isOpen={isProfileModalOpen && !!selectedProfile}
+				onClose={closeProfile}
+				title={selectedProfile ? selectedProfile.name : undefined}
+				className='SearchResults-profileModal'>
+				{selectedProfile && (
+					<div className='SearchResults-profileModalContent'>
+						<div className='SearchResults-profileModalHeader'>
+							<Avatar item={selectedProfile} />
+							<div className='SearchResults-profileTitleGroup'>
+								<Text className='SearchResults-profileName'>{selectedProfile.name}</Text>
+								<Text className='SearchResults-profileType'>{selectedProfile.service}</Text>
+							</div>
+						</div>
+
+						{selectedProfile.promo && (
+							<div className='SearchResults-profilePromo'>
+								<Text className='SearchResults-profilePromoLabel'>Promo</Text>
+								<Text className='SearchResults-profilePromoText'>{selectedProfile.promo}</Text>
+							</div>
+						)}
+
+						<div className='SearchResults-profileContact'>
+							<Text className='SearchResults-profilePromoLabel'>Contact</Text>
+							{selectedProfile.address && (
+								<Text className='SearchResults-profileContactLine'>
+									<span className='SearchResults-profileContactLabel'>Address:</span>
+									<span>{selectedProfile.address}</span>
+								</Text>
+							)}
+							<Text className='SearchResults-profileContactLine'>
+								<span className='SearchResults-profileContactLabel'>Phone:</span>
+								<a href={`tel:${selectedProfile.phone}`} className='SearchResults-profileContactLink'>
+									{selectedProfile.phone}
+								</a>
+							</Text>
+						</div>
+
+						<div className='SearchResults-profileServices'>
+							<Text className='SearchResults-profileSectionTitle'>Services offered</Text>
+							{selectedProfile.services && selectedProfile.services.length > 0 ?
+								<ul className='SearchResults-profileServicesList'>
+									{selectedProfile.services.map(service => (
+										<li key={service} className='SearchResults-profileServiceItem'>
+											{service}
+										</li>
+									))}
+								</ul>
+							:	<Text className='SearchResults-profileServiceFallback'>{selectedProfile.service}</Text>}
+						</div>
+					</div>
+				)}
+			</Modal>
 		</div>
 	);
 }
