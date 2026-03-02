@@ -62,6 +62,7 @@ export function SearchResults() {
 
 	return (
 		<div className='SearchResults-page'>
+			{/* Form */}
 			<form
 				className='SearchResults-form'
 				onSubmit={e => {
@@ -75,25 +76,32 @@ export function SearchResults() {
 				<Button type='submit'>Search</Button>
 			</form>
 
+			{/* List + Map */}
 			{city && (
-				<div className='SearchResults-listContainer'>
-					<Text className='SearchResults-title'>Results for “{city}”</Text>
-					<div className='SearchResults-list'>
-						{results.map(item => (
-							<span key={item.id} className='uk-item-active uk-border SearchResults-listItem'>
-								<Avatar item={item} />
-								<div className='SearchResults-listItemBody'>
-									<Text className='SearchResults-name'>{item.name}</Text>
-									<Text className='SearchResults-service'>{item.service}</Text>
-									{item.type === 'business' && item.address && (
-										<Text className='SearchResults-address'>{item.address}</Text>
-									)}
-									<Text className='SearchResults-phone'>{item.phone}</Text>
-								</div>
-							</span>
-						))}
+				<div className='SearchResults-content'>
+					<div className='SearchResults-listContainer'>
+						<Text className='SearchResults-title'>Results for “{city}”</Text>
+						<div className='SearchResults-list'>
+							{results.map(item => (
+								<span key={item.id} className='uk-item-active uk-border SearchResults-listItem'>
+									<Avatar item={item} />
+									<div className='SearchResults-listItemBody'>
+										<Text className='SearchResults-name'>{item.name}</Text>
+										<Text className='SearchResults-service'>{item.service}</Text>
+										{item.type === 'business' && item.address && (
+											<Text className='SearchResults-address'>{item.address}</Text>
+										)}
+										<Text className='SearchResults-phone'>{item.phone}</Text>
+									</div>
+								</span>
+							))}
+						</div>
+						{results.length === 0 && <Text className='SearchResults-muted'>No results.</Text>}
 					</div>
-					{results.length === 0 && <Text className='SearchResults-muted'>No results.</Text>}
+
+					<div className='SearchResults-mapContainer'>
+						<Text className='SearchResults-mapTitle'>Loading map...</Text>
+					</div>
 				</div>
 			)}
 
