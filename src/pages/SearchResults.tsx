@@ -72,7 +72,14 @@ export function SearchResults() {
 					const value = input?.value?.trim() ?? '';
 					setSearchParams(value ? { city: value } : {});
 				}}>
-				<Input name='city' type='text' placeholder='Enter city name' defaultValue={city} autoComplete='off' />
+				<Input
+					name='city'
+					type='text'
+					placeholder='Enter city name'
+					defaultValue={city}
+					autoComplete='off'
+					className='SearchResults-input'
+				/>
 				<Button type='submit'>Search</Button>
 			</form>
 
@@ -80,7 +87,7 @@ export function SearchResults() {
 			{city && (
 				<div className='SearchResults-content'>
 					<div className='SearchResults-listContainer'>
-						<Text className='SearchResults-title'>Results for “{city}”</Text>
+						<h1 className='SearchResults-title'>Results for “{city}”</h1>
 						<div className='SearchResults-list'>
 							{results.map(item => (
 								<span key={item.id} className='uk-item-active uk-border SearchResults-listItem'>
