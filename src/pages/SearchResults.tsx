@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { Grid2x2, Map } from 'lucide-react';
 import { Button, Input, Text } from '../components';
 import { cn } from '../lib/cn';
 import './SearchResults.css';
@@ -62,12 +64,30 @@ function Avatar({ item }: { item: SearchResultItem }) {
 
 export function SearchResults() {
 	const [searchParams, setSearchParams] = useSearchParams();
+	const [mobileView, setMobileView] = useState<'list' | 'map'>('list');
 	const city = searchParams.get('city') ?? '';
 	const results = city.trim() ? getMockResultsByCity(city) : [];
 	const displayCity = truncate(city, 25);
 
+	useEffect(() => {
+		if (typeof window === 'undefined') return;
+		const stored = window.localStorage.getItem('searchResultsMobileView');
+		if (stored === 'list' || stored === 'map') {
+			setMobileView(stored);
+		}
+	}, []);
+
+	useEffect(() => {
+		if (typeof window === 'undefined') return;
+		window.localStorage.setItem('searchResultsMobileView', mobileView);
+	}, [mobileView]);
+
 	return (
-		<div className='SearchResults-page'>
+		<div
+			className={cn(
+				'SearchResults-page',
+				mobileView === 'list' ? 'SearchResults-page--list' : 'SearchResults-page--map'
+			)}>
 			{/* Form */}
 			<form
 				className='SearchResults-form'
@@ -86,7 +106,18 @@ export function SearchResults() {
 					autoComplete='off'
 					className='SearchResults-input'
 				/>
-				<Button type='submit'>Search</Button>
+				<Button type='submit' className='SearchResults-search'>
+					Search
+				</Button>
+				<Button
+					type='button'
+					className='SearchResults-toggleOption'
+					onClick={() => setMobileView(prev => (prev === 'list' ? 'map' : 'list'))}
+					aria-label={mobileView === 'list' ? 'Show map view' : 'Show list view'}>
+					{mobileView === 'list' ?
+						<Map size={24} aria-hidden='true' />
+					:	<Grid2x2 size={24} aria-hidden='true' />}
+				</Button>
 			</form>
 
 			{/* List + Map */}
