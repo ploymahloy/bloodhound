@@ -13,6 +13,11 @@ export type SearchResultItem = {
 	avatarUrl?: string;
 };
 
+function truncate(value: string, maxLength: number) {
+	if (value.length <= maxLength) return value;
+	return `${value.slice(0, maxLength)}…`;
+}
+
 function getMockResultsByCity(_city: string): SearchResultItem[] {
 	return [
 		{
@@ -59,6 +64,7 @@ export function SearchResults() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const city = searchParams.get('city') ?? '';
 	const results = city.trim() ? getMockResultsByCity(city) : [];
+	const displayCity = truncate(city, 25);
 
 	return (
 		<div className='SearchResults-page'>
@@ -87,7 +93,7 @@ export function SearchResults() {
 			{city && (
 				<div className='SearchResults-content'>
 					<div className='SearchResults-listContainer'>
-						<h1 className='SearchResults-title'>Results for “{city}”</h1>
+						<h1 className='SearchResults-title'>Results for “{displayCity}”</h1>
 						<div className='SearchResults-list'>
 							{results.map(item => (
 								<span key={item.id} className='uk-item-active uk-border SearchResults-listItem'>
