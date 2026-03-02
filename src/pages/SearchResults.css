@@ -53,11 +53,6 @@
   background: var(--color-bg-body);
 }
 
-.SearchResults-listItemBody {
-  min-width: 0;
-  flex: 1;
-}
-
 .SearchResults-name {
   font-weight: 500;
   margin: 0;

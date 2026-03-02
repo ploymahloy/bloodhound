@@ -85,7 +85,7 @@ export function SearchResults() {
 							{results.map(item => (
 								<span key={item.id} className='uk-item-active uk-border SearchResults-listItem'>
 									<Avatar item={item} />
-									<div className='SearchResults-listItemBody'>
+									<div>
 										<Text className='SearchResults-name'>{item.name}</Text>
 										<Text className='SearchResults-service'>{item.service}</Text>
 										{item.type === 'business' && item.address && (
