@@ -23,6 +23,22 @@ export function setPlaceholderIfSupported(
   }
 }
 
+/** Set the autocomplete input value (e.g. for pre-fill). Uses internal input if present. */
+export function setValueIfSupported(
+  element: InstanceType<typeof google.maps.places.PlaceAutocompleteElement>,
+  value: string
+): void {
+  if (typeof (element as { value?: string }).value !== 'undefined') {
+    (element as { value: string }).value = value
+    return
+  }
+  const root = element.shadowRoot ?? element
+  const input = root.querySelector?.('input')
+  if (input) {
+    input.value = value
+  }
+}
+
 export function extractLatLngFromPlaceLocation(
   location: google.maps.LatLng | { lat: number; lng: number } | undefined
 ): { lat: number; lng: number } | null {

@@ -4,6 +4,7 @@ import {
   type GmpSelectEventDetail,
   extractLatLngFromPlaceLocation,
   setPlaceholderIfSupported,
+  setValueIfSupported,
 } from '../utils/placeAutocomplete'
 
 export interface PlaceSelectData {
@@ -11,12 +12,18 @@ export interface PlaceSelectData {
   location: { lat: number; lng: number } | null
 }
 
+export interface UsePlaceAutocompleteOptions {
+  onPlaceSelect: (data: PlaceSelectData) => void
+  /** Pre-fill the search bar with this text (e.g. current location). */
+  initialValue?: string
+}
+
 export function usePlaceAutocomplete(
   containerRef: RefObject<HTMLDivElement | null>,
   mapsLoaded: boolean,
-  options: { onPlaceSelect: (data: PlaceSelectData) => void }
+  options: UsePlaceAutocompleteOptions
 ): void {
-  const { onPlaceSelect } = options
+  const { onPlaceSelect, initialValue } = options
   const onPlaceSelectRef = useRef(onPlaceSelect)
   onPlaceSelectRef.current = onPlaceSelect
 
@@ -44,9 +51,13 @@ export function usePlaceAutocomplete(
 
     autocomplete.addEventListener('gmp-select', handleSelect)
     container.appendChild(autocomplete)
+    if (initialValue?.trim()) {
+      const value = initialValue.trim()
+      requestAnimationFrame(() => setValueIfSupported(autocomplete, value))
+    }
     return () => {
       autocomplete.removeEventListener('gmp-select', handleSelect)
       autocomplete.remove()
     }
-  }, [mapsLoaded, containerRef])
+  }, [mapsLoaded, containerRef, initialValue])
 }

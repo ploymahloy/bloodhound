@@ -1,7 +1,7 @@
 import { useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useGoogleMapsScript } from '../hooks/useGoogleMapsScript'
 import { usePlaceAutocomplete } from '../hooks/usePlaceAutocomplete'
-import { fetchDataByCoordinates } from '../services/locationApi'
 import './Landing.css'
 
 const HERO_CATEGORIES = [
@@ -15,24 +15,16 @@ const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
 function Landing() {
   const autocompleteContainerRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
   const { loaded: mapsLoaded, error: mapsError } = useGoogleMapsScript(googleMapsApiKey)
 
   usePlaceAutocomplete(autocompleteContainerRef, mapsLoaded, {
-    onPlaceSelect: async ({ location: coords }) => {
-      if (!coords) return
-      try {
-        const data = await fetchDataByCoordinates({
-          latitude: coords.lat,
-          longitude: coords.lng,
-        })
-        console.log('Data: ', data)
-        // TODO: handle response (e.g. navigate, show results)
-        alert('Data: ' + JSON.stringify(data))
-      } catch (err) {
-        console.error('Location search failed', err)
-        // TODO: surface error to user via error modal
-        alert('Location search failed: ' + JSON.stringify(err))
-      }
+    onPlaceSelect: ({ addressText, location: coords }) => {
+      if (!coords || !addressText?.trim()) return
+      const params = new URLSearchParams({
+        location: addressText.trim(),
+      })
+      navigate(`/results?${params.toString()}`)
     },
   })
 
