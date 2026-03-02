@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
-import { Box, Button, Input, Text } from '../components';
+import { Button, Input, Text } from '../components';
 import { cn } from '../lib/cn';
 import './SearchResults.css';
 
@@ -61,7 +61,7 @@ export function SearchResults() {
 	const results = city.trim() ? getMockResultsByCity(city) : [];
 
 	return (
-		<div className='SearchResults-root'>
+		<>
 			<form
 				className='SearchResults-form'
 				onSubmit={e => {
@@ -78,9 +78,9 @@ export function SearchResults() {
 			{city && (
 				<>
 					<Text className='SearchResults-title'>Results for “{city}”</Text>
-					<ul className='SearchResults-list'>
+					<div className='SearchResults-list'>
 						{results.map(item => (
-							<li key={item.id} className='uk-item-active uk-border SearchResults-listItem'>
+							<span key={item.id} className='uk-item-active uk-border SearchResults-listItem'>
 								<Avatar item={item} />
 								<div className='SearchResults-listItemBody'>
 									<Text className='SearchResults-name'>{item.name}</Text>
@@ -90,14 +90,14 @@ export function SearchResults() {
 									)}
 									<Text className='SearchResults-phone'>{item.phone}</Text>
 								</div>
-							</li>
+							</span>
 						))}
-					</ul>
+					</div>
 					{results.length === 0 && <Text className='SearchResults-muted'>No results.</Text>}
 				</>
 			)}
 
 			{!city && <Text className='SearchResults-muted'>Enter a city and click Search to see results.</Text>}
-		</div>
+		</>
 	);
 }
