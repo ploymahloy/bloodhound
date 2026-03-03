@@ -319,3 +319,22 @@
 		padding: 10px;
 	}
 }
+
+@media (max-width: 600px) {
+	.SearchResults-profileModalHeader .SearchResults-avatar {
+		width: 80px;
+		height: 80px;
+		min-width: 80px;
+		min-height: 80px;
+		font-size: 1.75rem;
+	}
+
+	.SearchResults-profileModalHeader {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.SearchResults-profileTitleGroup {
+		text-align: center;
+	}
+}
