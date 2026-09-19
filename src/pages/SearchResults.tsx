@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Grid2x2, Map } from 'lucide-react';
-import { Button, Input, Modal, Text } from '../components';
+import { Button, Input, Modal, Select, Text } from '../components';
+import { SEARCH_CATEGORY_OPTIONS } from '../lib/searchCategories';
 import { cn } from '../lib/cn';
 import './SearchResults.css';
 
@@ -20,6 +21,21 @@ export type SearchResultItem = {
 function truncate(value: string, maxLength: number) {
 	if (value.length <= maxLength) return value;
 	return `${value.slice(0, maxLength)}…`;
+}
+
+function matchesQuery(item: SearchResultItem, q: string) {
+	const needle = q.trim().toLowerCase();
+	if (!needle) return true;
+	const haystack = [item.name, item.service, ...(item.services ?? [])].join(' ').toLowerCase();
+	return haystack.includes(needle);
+}
+
+function getResultsTitle(q: string, city: string) {
+	const qDisplay = truncate(q, 25);
+	const cityDisplay = truncate(city, 25);
+	if (q && city) return `Results for “${qDisplay}” in “${cityDisplay}”`;
+	if (q) return `Results for “${qDisplay}”`;
+	return `Results for “${cityDisplay}”`;
 }
 
 function getMockResultsByCity(_city: string): SearchResultItem[] {
@@ -65,7 +81,7 @@ function Avatar({ item }: { item: SearchResultItem }) {
 		<div className={cn('uk-border', 'SearchResults-avatar')}>
 			{item.avatarUrl ?
 				<img src={item.avatarUrl} alt='' className='SearchResults-avatarImg' />
-			:	<span className='SearchResults-avatarInitial'>{initial}</span>}
+				: <span className='SearchResults-avatarInitial'>{initial}</span>}
 		</div>
 	);
 }
@@ -75,9 +91,10 @@ export function SearchResults() {
 	const [mobileView, setMobileView] = useState<'list' | 'map'>('list');
 	const [selectedProfile, setSelectedProfile] = useState<SearchResultItem | null>(null);
 	const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+	const q = searchParams.get('q') ?? '';
 	const city = searchParams.get('city') ?? '';
-	const results = city.trim() ? getMockResultsByCity(city) : [];
-	const displayCity = truncate(city, 25);
+	const hasSearch = Boolean(q.trim() || city.trim());
+	const results = hasSearch ? getMockResultsByCity(city).filter(item => matchesQuery(item, q)) : [];
 
 	useEffect(() => {
 		if (typeof window === 'undefined') return;
@@ -95,7 +112,7 @@ export function SearchResults() {
 	useEffect(() => {
 		setIsProfileModalOpen(false);
 		setSelectedProfile(null);
-	}, [city]);
+	}, [q, city]);
 
 	function openProfile(item: SearchResultItem) {
 		setSelectedProfile(item);
@@ -119,14 +136,29 @@ export function SearchResults() {
 				onSubmit={e => {
 					e.preventDefault();
 					const form = e.currentTarget;
-					const input = form.querySelector<HTMLInputElement>('input[name="city"]');
-					const value = input?.value?.trim() ?? '';
-					setSearchParams(value ? { city: value } : {});
+					const qInput = form.querySelector<HTMLSelectElement>('select[name="q"]');
+					const cityInput = form.querySelector<HTMLInputElement>('input[name="city"]');
+					const qValue = qInput?.value?.trim() ?? '';
+					const cityValue = cityInput?.value?.trim() ?? '';
+					const next: Record<string, string> = {};
+					if (qValue) next.q = qValue;
+					if (cityValue) next.city = cityValue;
+					setSearchParams(next);
 				}}>
 				<Input
+					key={`q-${q}`}
+					name='q'
+					type='text'
+					placeholder='I need a...'
+					defaultValue={q}
+					autoComplete='off'
+					className='SearchResults-input'
+				/>
+				<Input
+					key={`city-${city}`}
 					name='city'
 					type='text'
-					placeholder='Enter city name'
+					placeholder='City'
 					defaultValue={city}
 					autoComplete='off'
 					className='SearchResults-input'
@@ -141,15 +173,15 @@ export function SearchResults() {
 					aria-label={mobileView === 'list' ? 'Show map view' : 'Show list view'}>
 					{mobileView === 'list' ?
 						<Map size={24} aria-hidden='true' />
-					:	<Grid2x2 size={24} aria-hidden='true' />}
+						: <Grid2x2 size={24} aria-hidden='true' />}
 				</Button>
 			</form>
 
 			{/* List + Map */}
-			{city && (
+			{hasSearch && (
 				<div className='SearchResults-content'>
 					<div className='SearchResults-listContainer'>
-						<h1 className='SearchResults-title'>Results for “{displayCity}”</h1>
+						<h1 className='SearchResults-title'>{getResultsTitle(q, city)}</h1>
 						<div className='SearchResults-list'>
 							{results.map(item => (
 								<button
@@ -178,7 +210,9 @@ export function SearchResults() {
 				</div>
 			)}
 
-			{!city && <Text className='SearchResults-muted'>Enter a city and click Search to see results.</Text>}
+			{!hasSearch && (
+				<Text className='SearchResults-muted'>Enter what you’re looking for or a city to see results.</Text>
+			)}
 
 			<Modal
 				isOpen={isProfileModalOpen && !!selectedProfile}
@@ -228,7 +262,7 @@ export function SearchResults() {
 										</li>
 									))}
 								</ul>
-							:	<Text className='SearchResults-profileServiceFallback'>{selectedProfile.service}</Text>}
+								: <Text className='SearchResults-profileServiceFallback'>{selectedProfile.service}</Text>}
 						</div>
 					</div>
 				)}

@@ -6,6 +6,7 @@ export interface FieldProps
   hint?: React.ReactNode
   error?: boolean
   htmlFor?: string
+  srOnlyLabel?: boolean
   children: React.ReactNode
 }
 
@@ -14,6 +15,7 @@ export function Field({
   hint,
   error = false,
   htmlFor,
+  srOnlyLabel = false,
   className,
   children,
   ...props
@@ -21,7 +23,10 @@ export function Field({
   return (
     <div className={cn('uk-field', className)} {...props}>
       {label != null && (
-        <label className="uk-field__label" htmlFor={htmlFor}>
+        <label
+          className={cn('uk-field__label', srOnlyLabel && 'uk-sr-only')}
+          htmlFor={htmlFor}
+        >
           {label}
         </label>
       )}

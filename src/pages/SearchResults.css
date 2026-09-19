@@ -31,6 +31,8 @@
 }
 
 .SearchResults-input {
+	flex: 1 1 10rem;
+	min-width: 8rem;
 	font-size: 16px;
 }
 
