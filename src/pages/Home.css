@@ -1,4 +1,5 @@
 .Home-page {
+	position: relative;
 	min-height: 100dvh;
 	max-width: 1280px;
 	margin: 0 auto;
@@ -7,7 +8,23 @@
 	justify-content: center;
 }
 
+.Home-page::before {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	background-image: url('/topo.svg');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	filter: invert(1);
+	opacity: 0.02;
+}
+
 .Home-hero {
+	position: relative;
+	z-index: 1;
 	width: 100%;
 	max-width: 40rem;
 	margin: 0 auto;
