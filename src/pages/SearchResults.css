@@ -76,10 +76,15 @@
 	width: 100%;
 }
 
-.SearchResults-listItem:focus-visible {
+.SearchResults-listItem:focus-visible,
+.SearchResults-listItem--selected {
 	outline: none;
 	border-color: var(--color-active-accent);
 	box-shadow: 0 0 0 1px var(--color-active-accent);
+}
+
+.SearchResults-listItem--selected {
+	background: var(--color-hover-bg);
 }
 
 .SearchResults-name {
@@ -131,30 +136,12 @@
 }
 
 .SearchResults-mapContainer {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	position: relative;
+	isolation: isolate;
 	flex: 1 1 65%;
-	padding: 32px;
+	min-height: 400px;
 	overflow: hidden;
 	background-color: #05070a;
-	background-image:
-		radial-gradient(circle at 1px 1px, rgba(0, 229, 255, 0.28) 0, rgba(0, 229, 255, 0.28) 1px, transparent 1px),
-		linear-gradient(90deg, rgba(0, 229, 255, 0.12) 1px, transparent 1px),
-		linear-gradient(180deg, rgba(0, 229, 255, 0.12) 1px, transparent 1px);
-	background-size:
-		80px 80px,
-		80px 80px,
-		80px 80px;
-	background-position:
-		0 0,
-		0 0,
-		0 0;
-}
-
-.SearchResults-mapTitle {
-	color: var(--color-text);
-	margin-bottom: 16px;
 }
 
 .SearchResults-profileModalContent {

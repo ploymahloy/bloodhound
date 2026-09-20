@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Grid2x2, Map } from 'lucide-react';
-import { Button, Input, Modal, Select, Text } from '../components';
-import { SEARCH_CATEGORY_OPTIONS } from '../lib/searchCategories';
+import { Button, Input, Modal, SearchMap, Text } from '../components';
 import { cn } from '../lib/cn';
 import './SearchResults.css';
 
@@ -16,6 +15,8 @@ export type SearchResultItem = {
 	phone: string;
 	avatarUrl?: string;
 	promo?: string;
+	latitude: number;
+	longitude: number;
 };
 
 function truncate(value: string, maxLength: number) {
@@ -49,7 +50,9 @@ function getMockResultsByCity(_city: string): SearchResultItem[] {
 			address: '124 Main St, Suite 200',
 			phone: '(555) 123-4567',
 			avatarUrl: undefined,
-			promo: 'New artist special: 20% off your first full-day session.'
+			promo: 'New artist special: 20% off your first full-day session.',
+			latitude: 36.1668,
+			longitude: -86.7745
 		},
 		{
 			id: '2',
@@ -59,7 +62,9 @@ function getMockResultsByCity(_city: string): SearchResultItem[] {
 			services: ['Session recording', 'Live performance', 'Private lessons'],
 			phone: '(555) 987-6543',
 			avatarUrl: undefined,
-			promo: 'Now accepting new students for spring semester.'
+			promo: 'Now accepting new students for spring semester.',
+			latitude: 36.1495,
+			longitude: -86.792
 		},
 		{
 			id: '3',
@@ -70,7 +75,9 @@ function getMockResultsByCity(_city: string): SearchResultItem[] {
 			address: '88 Oak Avenue',
 			phone: '(555) 246-8135',
 			avatarUrl: undefined,
-			promo: 'Buy one set of strings, get the second half off.'
+			promo: 'Buy one set of strings, get the second half off.',
+			latitude: 36.1622,
+			longitude: -86.778
 		}
 	];
 }
@@ -91,10 +98,15 @@ export function SearchResults() {
 	const [mobileView, setMobileView] = useState<'list' | 'map'>('list');
 	const [selectedProfile, setSelectedProfile] = useState<SearchResultItem | null>(null);
 	const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+	const [highlightedId, setHighlightedId] = useState<string | null>(null);
+	const listItemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 	const q = searchParams.get('q') ?? '';
 	const city = searchParams.get('city') ?? '';
 	const hasSearch = Boolean(q.trim() || city.trim());
-	const results = hasSearch ? getMockResultsByCity(city).filter(item => matchesQuery(item, q)) : [];
+	const results = useMemo(
+		() => (hasSearch ? getMockResultsByCity(city).filter(item => matchesQuery(item, q)) : []),
+		[hasSearch, city, q]
+	);
 
 	useEffect(() => {
 		if (typeof window === 'undefined') return;
@@ -112,16 +124,27 @@ export function SearchResults() {
 	useEffect(() => {
 		setIsProfileModalOpen(false);
 		setSelectedProfile(null);
+		setHighlightedId(null);
 	}, [q, city]);
 
+	useEffect(() => {
+		if (!highlightedId) return;
+		listItemRefs.current[highlightedId]?.scrollIntoView({ block: 'nearest' });
+	}, [highlightedId]);
+
 	function openProfile(item: SearchResultItem) {
+		setHighlightedId(item.id);
 		setSelectedProfile(item);
 		setIsProfileModalOpen(true);
 	}
 
 	function closeProfile() {
 		setIsProfileModalOpen(false);
-		setSelectedProfile(null);
+	}
+
+	function handleMapSelect(item: { id: string }) {
+		const match = results.find(result => result.id === item.id);
+		if (match) openProfile(match);
 	}
 
 	return (
@@ -187,7 +210,16 @@ export function SearchResults() {
 								<button
 									type='button'
 									key={item.id}
-									className='uk-item-active uk-border SearchResults-listItem'
+									ref={node => {
+										listItemRefs.current[item.id] = node;
+									}}
+									className={cn(
+										'uk-item-active',
+										'uk-border',
+										'SearchResults-listItem',
+										highlightedId === item.id && 'SearchResults-listItem--selected'
+									)}
+									aria-current={highlightedId === item.id ? 'true' : undefined}
 									onClick={() => openProfile(item)}>
 									<Avatar item={item} />
 									<div>
@@ -205,7 +237,7 @@ export function SearchResults() {
 					</div>
 
 					<div className='SearchResults-mapContainer'>
-						<Text className='SearchResults-mapTitle'>Loading map...</Text>
+						<SearchMap items={results} selectedId={highlightedId} onSelect={handleMapSelect} />
 					</div>
 				</div>
 			)}

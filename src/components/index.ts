@@ -11,6 +11,7 @@ export { Message, type MessageProps, type MessageVariant } from './Message';
 export { Modal, type ModalProps } from './Modal';
 export { Navbar } from './Navbar';
 export { Radio, type RadioProps } from './Radio';
+export { SearchMap, type SearchMapItem, type SearchMapProps } from './SearchMap';
 export { Select, type SelectProps, type SelectOption } from './Select';
 export { Sidebar } from './Sidebar';
 export { Text, type TextProps } from './Text';
