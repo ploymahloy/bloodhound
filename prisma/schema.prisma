@@ -5,7 +5,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -31,5 +30,4 @@ model User {
 enum Role {
   USER
   ADMIN
-  MODERATOR
 }
