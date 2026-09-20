@@ -10,12 +10,13 @@ body:has(.Navbar-drawer--open) {
 	position: fixed;
 	top: 0;
 	inset-inline: 0;
-	z-index: 60;
+	z-index: 1;
 	height: var(--navbar-height);
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	padding: 1.25rem;
+	padding-left: 2rem;
 	background: transparent;
 }
 
@@ -74,14 +75,14 @@ body:has(.Navbar-drawer--open) {
 
 .Navbar-overlay--open {
 	opacity: 1;
-	z-index: 50;
+	z-index: 1;
 }
 
 .Navbar-drawer {
 	position: fixed;
 	top: 0;
 	right: 0;
-	z-index: 55;
+	z-index: 1;
 	width: 17rem;
 	height: 100dvh;
 	padding: calc(var(--navbar-height) + 0.75rem) 1rem 1.5rem;
