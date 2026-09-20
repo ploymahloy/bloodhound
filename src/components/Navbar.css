@@ -69,6 +69,7 @@ body:has(.Navbar-drawer--open) {
 	background-color: rgba(10, 10, 10, 0.7);
 	opacity: 0;
 	transition: opacity var(--transition-normal);
+	z-index: 0;
 }
 
 .Navbar-overlay--open {
