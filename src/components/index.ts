@@ -9,6 +9,7 @@ export { ItemActive, type ItemActiveProps } from './ItemActive';
 export { Link, type LinkProps } from './Link';
 export { Message, type MessageProps, type MessageVariant } from './Message';
 export { Modal, type ModalProps } from './Modal';
+export { Navbar } from './Navbar';
 export { Radio, type RadioProps } from './Radio';
 export { Select, type SelectProps, type SelectOption } from './Select';
 export { Sidebar } from './Sidebar';

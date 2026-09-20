@@ -1,12 +1,16 @@
 import { Routes, Route } from 'react-router-dom';
+import { Navbar } from './components';
 import { Home, SearchResults } from './pages';
 
 function App() {
 	return (
-		<Routes>
-			<Route path='/' element={<Home />} />
-			<Route path='/search' element={<SearchResults />} />
-		</Routes>
+		<>
+			<Navbar />
+			<Routes>
+				<Route path='/' element={<Home />} />
+				<Route path='/search' element={<SearchResults />} />
+			</Routes>
+		</>
 	);
 }
 
