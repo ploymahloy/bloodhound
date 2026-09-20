@@ -69,13 +69,11 @@ body:has(.Navbar-drawer--open) {
 	z-index: 50;
 	background-color: rgba(10, 10, 10, 0.7);
 	opacity: 0;
-	pointer-events: none;
 	transition: opacity var(--transition-normal);
 }
 
 .Navbar-overlay--open {
 	opacity: 1;
-	pointer-events: auto;
 }
 
 .Navbar-drawer {
@@ -89,12 +87,10 @@ body:has(.Navbar-drawer--open) {
 	background: var(--color-bg-surface);
 	transform: translateX(100%);
 	transition: transform var(--transition-normal);
-	pointer-events: none;
 }
 
 .Navbar-drawer--open {
 	transform: translateX(0);
-	pointer-events: auto;
 }
 
 .Navbar-nav {
