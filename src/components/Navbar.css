@@ -1,5 +1,5 @@
 :root {
-	--navbar-height: 3.5rem;
+	--navbar-height: 96px;
 }
 
 body:has(.Navbar-drawer--open) {
@@ -15,7 +15,7 @@ body:has(.Navbar-drawer--open) {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 1.25rem 1.25rem 0;
+	padding: 1.25rem;
 	background: transparent;
 }
 
