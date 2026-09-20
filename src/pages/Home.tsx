@@ -57,7 +57,8 @@ export function Home() {
 						type='button'
 						className='Home-rotatingWord'
 						onClick={fillKeywordFromTerm}
-						aria-label={`Use “${currentTerm}” as the search term`}>
+						aria-label={`Use “${currentTerm}” as the search term`}
+						tabIndex={-1}>
 						<span key={termIndex} className='Home-rotatingWordText' aria-live='polite'>
 							{currentTerm}
 						</span>
