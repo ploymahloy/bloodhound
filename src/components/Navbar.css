@@ -15,7 +15,7 @@ body:has(.Navbar-drawer--open) {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 0 1.25rem;
+	padding: 1.25rem 1.25rem 0;
 	background: transparent;
 }
 
