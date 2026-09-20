@@ -413,7 +413,7 @@ a:focus-visible {
 /* Active / Selected — left border accent */
 .uk-active,
 .uk-selected {
-	border-left: var(--accent-border-width) solid var(--color-active-accent) !important;
+	border-left: var(--accent-border-width) solid var(--color-active-accent);
 }
 
 /* Apply to list items or cards; add padding so content doesn't shift */
