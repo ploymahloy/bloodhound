@@ -1,4 +1,4 @@
-import { cn } from '../utils/cn'
+import { cn } from '../lib/cn'
 
 export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   children: React.ReactNode

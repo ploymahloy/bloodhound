@@ -1,4 +1,4 @@
-import { cn } from '../utils/cn'
+import { cn } from '../lib/cn'
 
 export interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
   disabled?: boolean
