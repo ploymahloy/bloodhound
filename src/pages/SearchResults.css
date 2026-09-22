@@ -16,7 +16,7 @@
 	display: flex;
 	gap: 12px;
 	padding: 24px;
-	background: var(--color-bg-surface);
+	background-color: transparent;
 }
 
 .SearchResults-toggleOption {
@@ -52,7 +52,7 @@
 .SearchResults-listContainer {
 	padding: 0 2rem;
 	padding-bottom: 24px;
-	background: var(--color-bg-surface);
+	background-color: transparent;
 	flex: 1 1 35%;
 	display: flex;
 	flex-direction: column;
@@ -60,7 +60,7 @@
 
 .SearchResults-list {
 	list-style: none;
-	background: var(--color-bg-surface);
+	background-color: transparent;
 }
 
 .SearchResults-listItem {
