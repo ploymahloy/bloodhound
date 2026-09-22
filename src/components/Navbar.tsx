@@ -27,7 +27,7 @@ export function Navbar() {
 		<div onKeyDown={handleKeyDown}>
 			<header className='Navbar'>
 				<NavLink to='/' className='Navbar-brand' end>
-					Legato
+					Bloodhound
 				</NavLink>
 				<button
 					type='button'
