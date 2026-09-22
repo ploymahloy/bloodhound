@@ -1,9 +1,9 @@
 .SearchResults-page {
-	min-height: 100vh;
+	min-height: 100dvh;
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
-	padding-top: 96px;
+	padding-top: 7rem;
 }
 
 .SearchResults-content {
@@ -18,7 +18,7 @@
 	align-items: flex-start;
 	flex-wrap: wrap;
 	gap: 0.75rem;
-	padding: 24px;
+	padding: 1.5rem 2rem;
 	background-color: transparent;
 }
 
@@ -44,7 +44,7 @@
 
 .SearchResults-input {
 	width: 100%;
-	font-size: 16px;
+	font-size: 1rem;
 	height: 2.75rem;
 	box-sizing: border-box;
 }
@@ -67,19 +67,18 @@
 
 .SearchResults-title {
 	color: var(--color-text);
-	font-size: 20px;
-	margin-bottom: 16px;
+	font-size: 1.25rem;
+	margin: 0 0 1rem;
 }
 
 .SearchResults-service {
 	font-size: 0.875rem;
 	color: var(--color-text);
-	margin: 4px 0 0;
+	margin: 0.25rem 0 0;
 }
 
 .SearchResults-listContainer {
-	padding: 0 2rem;
-	padding-bottom: 24px;
+	padding: 0.5rem 2rem 1.5rem;
 	background-color: transparent;
 	flex: 1 1 35%;
 	display: flex;
@@ -93,9 +92,9 @@
 
 .SearchResults-listItem {
 	display: flex;
-	gap: 16px;
-	padding: 16px;
-	margin-bottom: 12px;
+	gap: 1rem;
+	padding: 1rem;
+	margin-bottom: 0.75rem;
 	border-radius: var(--border-radius-md);
 	border-left: var(--accent-border-width) solid var(--color-active-accent);
 	background: var(--color-bg-body);
@@ -116,7 +115,7 @@
 }
 
 .SearchResults-name {
-	font-size: 16px;
+	font-size: 1rem;
 	font-weight: 500;
 	margin: 0;
 }
@@ -124,25 +123,26 @@
 .SearchResults-address {
 	font-size: 0.875rem;
 	color: var(--color-text-disabled);
-	margin: 4px 0 0;
+	margin: 0.25rem 0 0;
 }
 
 .SearchResults-phone {
 	font-size: 0.875rem;
-	margin: 4px 0 0;
+	margin: 0.25rem 0 0;
 }
 
 .SearchResults-muted {
 	width: fit-content;
 	margin: 2rem auto 0;
+	padding: 0 1.5rem;
 	color: var(--color-text-disabled);
 }
 
 .SearchResults-avatar {
-	width: 48px;
-	height: 48px;
-	min-width: 48px;
-	min-height: 48px;
+	width: 3rem;
+	height: 3rem;
+	min-width: 3rem;
+	min-height: 3rem;
 	border-radius: 50%;
 	display: flex;
 	align-items: center;
@@ -167,7 +167,7 @@
 	position: relative;
 	isolation: isolate;
 	flex: 1 1 65%;
-	min-height: 400px;
+	min-height: 25rem;
 	overflow: hidden;
 	background-color: #05070a;
 }
@@ -175,19 +175,19 @@
 .SearchResults-profileModalContent {
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
+	gap: 1rem;
 }
 
 .SearchResults-profileModalHeader {
 	display: flex;
 	align-items: center;
-	gap: 12px;
+	gap: 0.75rem;
 }
 
 .SearchResults-profileTitleGroup {
 	display: flex;
 	flex-direction: column;
-	gap: 2px;
+	gap: 0.125rem;
 }
 
 .SearchResults-profileName {
@@ -206,8 +206,8 @@
 .SearchResults-profileContact {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
-	padding: 10px 12px;
+	gap: 0.25rem;
+	padding: 0.625rem 0.75rem;
 	border-radius: var(--border-radius-lg);
 	background: rgba(8, 47, 73, 0.9);
 	border: 1px solid rgba(56, 189, 248, 0.7);
@@ -216,7 +216,7 @@
 .SearchResults-profileContactLine {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 4px;
+	gap: 0.25rem;
 	margin: 0;
 	font-size: 0.9rem;
 }
@@ -236,14 +236,14 @@
 }
 
 .SearchResults-profilePromo {
-	padding: 10px 12px;
+	padding: 0.625rem 0.75rem;
 	border-radius: var(--border-radius-lg);
 	background: rgba(8, 73, 8, 0.9);
 	border: 1px solid rgba(56, 248, 78, 0.7);
 }
 
 .SearchResults-profilePromoLabel {
-	margin: 0 0 4px;
+	margin: 0 0 0.25rem;
 	font-size: 0.75rem;
 	letter-spacing: 0.05em;
 	text-transform: uppercase;
@@ -258,7 +258,7 @@
 .SearchResults-profileServices {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: 0.5rem;
 }
 
 .SearchResults-profileSectionTitle {
@@ -269,10 +269,10 @@
 
 .SearchResults-profileServicesList {
 	margin: 0;
-	padding-left: 20px;
+	padding-left: 1.25rem;
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 0.25rem;
 	font-size: 0.9rem;
 }
 
@@ -293,6 +293,7 @@
 
 	.SearchResults-form {
 		flex-wrap: wrap;
+		padding: 1.5rem;
 	}
 
 	.SearchResults-field {
@@ -319,16 +320,16 @@
 	}
 
 	.SearchResults-listContainer {
-		padding: 0 1.5rem 16px;
+		padding: 0.5rem 1.5rem 1rem;
 	}
 
 	.SearchResults-mapContainer {
 		margin: 0;
-		min-height: 560px;
+		min-height: 35rem;
 	}
 
 	.SearchResults-profileModalContent {
-		gap: 14px;
+		gap: 0.875rem;
 	}
 
 	.SearchResults-profileName {
@@ -336,20 +337,26 @@
 	}
 
 	.SearchResults-profileContact {
-		padding: 10px;
+		padding: 0.625rem;
 	}
 
 	.SearchResults-profilePromo {
-		padding: 10px;
+		padding: 0.625rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.SearchResults-field {
+		flex: 1 1 100%;
 	}
 }
 
 @media (max-width: 600px) {
 	.SearchResults-profileModalHeader .SearchResults-avatar {
-		width: 80px;
-		height: 80px;
-		min-width: 80px;
-		min-height: 80px;
+		width: 5rem;
+		height: 5rem;
+		min-width: 5rem;
+		min-height: 5rem;
 		font-size: 1.75rem;
 	}
 

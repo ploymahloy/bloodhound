@@ -4,7 +4,8 @@
 	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: safe center;
+	padding: 7rem 1.25rem 1.5rem;
 }
 
 .Home-hero {
@@ -15,10 +16,10 @@
 }
 
 .Home-headline {
-	margin: 0 0 1rem;
-	font-size: 3rem;
+	margin: 0 0 clamp(1.25rem, 2vw, 1.75rem);
+	font-size: clamp(2rem, 0.4rem + 7.5vw, 2.5rem);
 	font-weight: 600;
-	line-height: 1;
+	line-height: 1.15;
 	text-align: center;
 	color: var(--color-text-heading);
 }
@@ -37,6 +38,7 @@
 	font-weight: 600;
 	color: var(--color-accent);
 	text-align: center;
+	white-space: nowrap;
 }
 
 .Home-rotatingWord:focus-visible {
@@ -54,7 +56,6 @@
 	display: flex;
 	flex-direction: column;
 	gap: 0.75rem;
-	padding: 0 1.25rem;
 }
 
 .Home-field {
@@ -97,7 +98,7 @@
 
 @media (min-width: 640px) {
 	.Home-page {
-		padding: 2rem;
+		padding: 7rem 2rem 2rem;
 	}
 
 	.Home-hero {
@@ -117,8 +118,12 @@
 	.Home-form {
 		flex-direction: row;
 		align-items: flex-start;
-		gap: 0.75rem;
-		padding: 0;
+		gap: 1rem;
+	}
+
+	.Home-field {
+		flex: 1 1 0;
+		min-width: 0;
 	}
 
 	.Home-input,
