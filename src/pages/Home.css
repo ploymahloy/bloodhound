@@ -1,0 +1,142 @@
+.Home-page {
+	min-height: 100dvh;
+	max-width: 1280px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.Home-hero {
+	position: relative;
+	width: 100%;
+	max-width: 40rem;
+	margin: 0 auto;
+}
+
+.Home-headline {
+	margin: 0 0 1rem;
+	font-size: 3rem;
+	font-weight: 600;
+	line-height: 1;
+	text-align: center;
+	color: var(--color-text-heading);
+}
+
+.Home-headlineStatic {
+	display: inline;
+}
+
+.Home-rotatingWord {
+	display: block;
+	padding: 0;
+	margin: 0 auto;
+	border: none;
+	background: none;
+	font: inherit;
+	font-weight: 600;
+	color: var(--color-accent);
+	text-align: center;
+}
+
+.Home-rotatingWord:focus-visible {
+	outline: 2px solid var(--color-focus-ring);
+	outline-offset: 2px;
+	border-radius: var(--border-radius-sm);
+}
+
+.Home-rotatingWordText {
+	display: inline-block;
+	animation: Home-wordIn 0.45s ease;
+}
+
+.Home-form {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	padding: 0 1.25rem;
+}
+
+.Home-field {
+	margin-bottom: 0;
+	flex: 1 1 auto;
+}
+
+.Home-input {
+	font-size: 16px;
+}
+
+.Home-select--empty {
+	color: var(--color-text-disabled);
+}
+
+.Home-select--empty option {
+	color: var(--color-text);
+}
+
+.Home-search {
+	width: 100%;
+}
+
+@keyframes Home-wordIn {
+	from {
+		opacity: 0;
+		transform: translateY(0.4em);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.Home-rotatingWordText {
+		animation: none;
+	}
+}
+
+@media (min-width: 640px) {
+	.Home-page {
+		padding: 2rem;
+	}
+
+	.Home-hero {
+		max-width: 52rem;
+	}
+
+	.Home-headline {
+		font-size: 2.5rem;
+		text-align: left;
+	}
+
+	.Home-rotatingWord {
+		display: inline;
+		text-align: left;
+	}
+
+	.Home-form {
+		flex-direction: row;
+		align-items: flex-start;
+		gap: 0.75rem;
+		padding: 0;
+	}
+
+	.Home-input,
+	.Home-search {
+		height: 2.75rem;
+		box-sizing: border-box;
+	}
+
+	.Home-search {
+		width: auto;
+		flex: 0 0 auto;
+		padding-left: 1.5rem;
+		padding-right: 1.5rem;
+	}
+}
+
+@media (min-width: 960px) {
+	.Home-headline {
+		font-size: 3rem;
+	}
+}

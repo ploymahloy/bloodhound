@@ -1,15 +1,17 @@
-import { Routes, Route } from 'react-router-dom'
-import { Auth, Callback, Landing, Results } from './pages'
+import { Routes, Route } from 'react-router-dom';
+import { Navbar } from './components';
+import { Home, SearchResults } from './pages';
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/results" element={<Results />} />
-      <Route path="/login" element={<Auth />} />
-      <Route path="/callback" element={<Callback />} />
-    </Routes>
-  )
+	return (
+		<>
+			<Navbar />
+			<Routes>
+				<Route path='/' element={<Home />} />
+				<Route path='/search' element={<SearchResults />} />
+			</Routes>
+		</>
+	);
 }
 
-export default App
+export default App;
