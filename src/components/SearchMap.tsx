@@ -2,10 +2,12 @@ import { useEffect } from 'react';
 import L from 'leaflet';
 import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+
+import { US_FALLBACK_CENTER } from '../lib/search';
 import './SearchMap.css';
 
-const NASHVILLE_CENTER: [number, number] = [36.1627, -86.7816];
 const DEFAULT_ZOOM = 13;
+const EMPTY_FALLBACK_ZOOM = 4;
 const TILE_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const TILE_ATTRIBUTION =
 	'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
@@ -20,6 +22,7 @@ export type SearchMapItem = {
 export type SearchMapProps = {
 	items: SearchMapItem[];
 	selectedId: string | null;
+	fallbackCenter?: [number, number];
 	onSelect: (item: SearchMapItem) => void;
 };
 
@@ -42,20 +45,31 @@ function prefersReducedMotion() {
 	return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-function FitBounds({ items, selectedId }: { items: SearchMapItem[]; selectedId: string | null }) {
+function FitBounds({
+	items,
+	selectedId,
+	fallbackCenter
+}: {
+	items: SearchMapItem[];
+	selectedId: string | null;
+	fallbackCenter: [number, number];
+}) {
 	const map = useMap();
 	const boundsKey = items.map(item => `${item.id}:${item.latitude}:${item.longitude}`).join('|');
+	const fallbackKey = `${fallbackCenter[0]},${fallbackCenter[1]}`;
 
 	useEffect(() => {
 		const animate = !prefersReducedMotion();
 		if (items.length === 0) {
-			map.setView(NASHVILLE_CENTER, DEFAULT_ZOOM, { animate });
+			const isUsWide =
+				fallbackCenter[0] === US_FALLBACK_CENTER[0] && fallbackCenter[1] === US_FALLBACK_CENTER[1];
+			map.setView(fallbackCenter, isUsWide ? EMPTY_FALLBACK_ZOOM : DEFAULT_ZOOM, { animate });
 			return;
 		}
 
 		const bounds = L.latLngBounds(items.map(item => [item.latitude, item.longitude]));
 		map.fitBounds(bounds, { padding: [40, 40], maxZoom: 15, animate });
-	}, [map, boundsKey, items]);
+	}, [map, boundsKey, items, fallbackKey, fallbackCenter]);
 
 	useEffect(() => {
 		if (!selectedId) return;
@@ -83,18 +97,18 @@ function InvalidateOnResize() {
 	return null;
 }
 
-export function SearchMap({ items, selectedId, onSelect }: SearchMapProps) {
+export function SearchMap({ items, selectedId, fallbackCenter = US_FALLBACK_CENTER, onSelect }: SearchMapProps) {
 	return (
 		<div className='SearchMap'>
 			<MapContainer
 				className='SearchMap-leaflet'
-				center={NASHVILLE_CENTER}
+				center={fallbackCenter}
 				zoom={DEFAULT_ZOOM}
 				scrollWheelZoom
 				attributionControl>
 				<TileLayer attribution={TILE_ATTRIBUTION} url={TILE_URL} />
 				<InvalidateOnResize />
-				<FitBounds items={items} selectedId={selectedId} />
+				<FitBounds items={items} selectedId={selectedId} fallbackCenter={fallbackCenter} />
 				{items.map(item => (
 					<Marker
 						key={item.id}

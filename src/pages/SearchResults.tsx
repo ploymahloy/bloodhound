@@ -1,34 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Grid2x2, Map } from 'lucide-react';
-import { Button, Input, Modal, SearchMap, Text } from '../components';
+import { Button, Field, Input, Modal, SearchMap, Select, Text } from '../components';
 import { cn } from '../lib/cn';
+import {
+	getSearchMapFallbackCenter,
+	searchListings,
+	type SearchResultItem
+} from '../lib/search';
+import { SEARCH_CATEGORY_OPTIONS } from '../lib/searchCategories';
 import './SearchResults.css';
-
-export type SearchResultItem = {
-	id: string;
-	name: string;
-	type: 'business' | 'individual';
-	service: string;
-	services?: string[];
-	address?: string;
-	phone: string;
-	avatarUrl?: string;
-	promo?: string;
-	latitude: number;
-	longitude: number;
-};
 
 function truncate(value: string, maxLength: number) {
 	if (value.length <= maxLength) return value;
 	return `${value.slice(0, maxLength)}…`;
-}
-
-function matchesQuery(item: SearchResultItem, q: string) {
-	const needle = q.trim().toLowerCase();
-	if (!needle) return true;
-	const haystack = [item.name, item.service, ...(item.services ?? [])].join(' ').toLowerCase();
-	return haystack.includes(needle);
 }
 
 function getResultsTitle(q: string, city: string) {
@@ -37,49 +22,6 @@ function getResultsTitle(q: string, city: string) {
 	if (q && city) return `Results for “${qDisplay}” in “${cityDisplay}”`;
 	if (q) return `Results for “${qDisplay}”`;
 	return `Results for “${cityDisplay}”`;
-}
-
-function getMockResultsByCity(_city: string): SearchResultItem[] {
-	return [
-		{
-			id: '1',
-			name: 'Riverside Sound Studio',
-			type: 'business',
-			service: 'Recording Studio',
-			services: ['Full-band tracking', 'Mixing & mastering', 'Podcast production'],
-			address: '124 Main St, Suite 200',
-			phone: '(555) 123-4567',
-			avatarUrl: undefined,
-			promo: 'New artist special: 20% off your first full-day session.',
-			latitude: 36.1668,
-			longitude: -86.7745
-		},
-		{
-			id: '2',
-			name: 'Alex Chen',
-			type: 'individual',
-			service: 'Trumpet Player',
-			services: ['Session recording', 'Live performance', 'Private lessons'],
-			phone: '(555) 987-6543',
-			avatarUrl: undefined,
-			promo: 'Now accepting new students for spring semester.',
-			latitude: 36.1495,
-			longitude: -86.792
-		},
-		{
-			id: '3',
-			name: 'Downtown Music Co.',
-			type: 'business',
-			service: 'Music Store',
-			services: ['Instrument sales', 'Repairs & maintenance', 'Accessory shop'],
-			address: '88 Oak Avenue',
-			phone: '(555) 246-8135',
-			avatarUrl: undefined,
-			promo: 'Buy one set of strings, get the second half off.',
-			latitude: 36.1622,
-			longitude: -86.778
-		}
-	];
 }
 
 function Avatar({ item }: { item: SearchResultItem }) {
@@ -93,20 +35,37 @@ function Avatar({ item }: { item: SearchResultItem }) {
 	);
 }
 
+function categoryOptionValue(raw: string) {
+	const needle = raw.trim().toLowerCase();
+	if (!needle) return '';
+	const match = SEARCH_CATEGORY_OPTIONS.find(option => option.value.toLowerCase() === needle);
+	return match?.value ?? '';
+}
+
 export function SearchResults() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [mobileView, setMobileView] = useState<'list' | 'map'>('list');
 	const [selectedProfile, setSelectedProfile] = useState<SearchResultItem | null>(null);
 	const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 	const [highlightedId, setHighlightedId] = useState<string | null>(null);
+	const [query, setQuery] = useState('');
+	const [cityInput, setCityInput] = useState('');
+	const [showEmptyError, setShowEmptyError] = useState(false);
 	const listItemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 	const q = searchParams.get('q') ?? '';
 	const city = searchParams.get('city') ?? '';
 	const hasSearch = Boolean(q.trim() || city.trim());
 	const results = useMemo(
-		() => (hasSearch ? getMockResultsByCity(city).filter(item => matchesQuery(item, q)) : []),
+		() => (hasSearch ? searchListings({ q, city }) : []),
 		[hasSearch, city, q]
 	);
+	const mapFallbackCenter = useMemo(() => getSearchMapFallbackCenter(city), [city]);
+
+	useEffect(() => {
+		setQuery(categoryOptionValue(q));
+		setCityInput(city);
+		setShowEmptyError(false);
+	}, [q, city]);
 
 	useEffect(() => {
 		if (typeof window === 'undefined') return;
@@ -147,6 +106,22 @@ export function SearchResults() {
 		if (match) openProfile(match);
 	}
 
+	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		const qValue = query.trim();
+		const cityValue = cityInput.trim();
+
+		if (!qValue && !cityValue) {
+			setShowEmptyError(true);
+			return;
+		}
+
+		const next: Record<string, string> = {};
+		if (qValue) next.q = qValue;
+		if (cityValue) next.city = cityValue;
+		setSearchParams(next);
+	}
+
 	return (
 		<div
 			className={cn(
@@ -154,39 +129,44 @@ export function SearchResults() {
 				mobileView === 'list' ? 'SearchResults-page--list' : 'SearchResults-page--map'
 			)}>
 			{/* Form */}
-			<form
-				className='SearchResults-form'
-				onSubmit={e => {
-					e.preventDefault();
-					const form = e.currentTarget;
-					const qInput = form.querySelector<HTMLSelectElement>('select[name="q"]');
-					const cityInput = form.querySelector<HTMLInputElement>('input[name="city"]');
-					const qValue = qInput?.value?.trim() ?? '';
-					const cityValue = cityInput?.value?.trim() ?? '';
-					const next: Record<string, string> = {};
-					if (qValue) next.q = qValue;
-					if (cityValue) next.city = cityValue;
-					setSearchParams(next);
-				}}>
-				<Input
-					key={`q-${q}`}
-					name='q'
-					type='text'
-					placeholder='I need a...'
-					defaultValue={q}
-					autoComplete='off'
-					className='SearchResults-input'
-				/>
-				<Input
-					key={`city-${city}`}
-					name='city'
-					type='text'
-					placeholder='City'
-					defaultValue={city}
-					autoComplete='off'
-					className='SearchResults-input'
-				/>
-				<Button type='submit' className='SearchResults-search'>
+			<form className='SearchResults-form' onSubmit={handleSubmit} noValidate>
+				<Field
+					className='SearchResults-field'
+					label='I need a...'
+					htmlFor='search-query'
+					srOnlyLabel
+					error={showEmptyError}
+					hint={showEmptyError ? 'Choose what you’re looking for or enter a city.' : undefined}>
+					<Select
+						id='search-query'
+						name='q'
+						value={query}
+						options={SEARCH_CATEGORY_OPTIONS}
+						onChange={e => {
+							setQuery(e.target.value);
+							if (showEmptyError) setShowEmptyError(false);
+						}}
+						className={query ? 'SearchResults-input' : 'SearchResults-input SearchResults-select--empty'}
+					/>
+				</Field>
+
+				<Field className='SearchResults-field' label='City' htmlFor='search-city' srOnlyLabel>
+					<Input
+						id='search-city'
+						name='city'
+						type='text'
+						placeholder='Enter a city, state, or zip code'
+						autoComplete='off'
+						value={cityInput}
+						onChange={e => {
+							setCityInput(e.target.value);
+							if (showEmptyError) setShowEmptyError(false);
+						}}
+						className='SearchResults-input'
+					/>
+				</Field>
+
+				<Button type='submit' size='lg' className='SearchResults-search'>
 					Search
 				</Button>
 				<Button
@@ -237,7 +217,12 @@ export function SearchResults() {
 					</div>
 
 					<div className='SearchResults-mapContainer'>
-						<SearchMap items={results} selectedId={highlightedId} onSelect={handleMapSelect} />
+						<SearchMap
+							items={results}
+							selectedId={highlightedId}
+							fallbackCenter={mapFallbackCenter}
+							onSelect={handleMapSelect}
+						/>
 					</div>
 				</div>
 			)}

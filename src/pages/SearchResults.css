@@ -14,13 +14,24 @@
 
 .SearchResults-form {
 	display: flex;
-	gap: 12px;
+	flex-direction: row;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	gap: 0.75rem;
 	padding: 24px;
 	background-color: transparent;
 }
 
+.SearchResults-field {
+	margin-bottom: 0;
+	flex: 1 1 10rem;
+	min-width: 8rem;
+}
+
 .SearchResults-toggleOption {
 	display: none;
+	flex: 0 0 auto;
+	height: 2.75rem;
 	border-radius: var(--border-radius-lg);
 	background: var(--color-bg-body);
 	color: var(--color-text-muted);
@@ -32,9 +43,26 @@
 }
 
 .SearchResults-input {
-	flex: 1 1 10rem;
-	min-width: 8rem;
+	width: 100%;
 	font-size: 16px;
+	height: 2.75rem;
+	box-sizing: border-box;
+}
+
+.SearchResults-select--empty {
+	color: var(--color-text-disabled);
+}
+
+.SearchResults-select--empty option {
+	color: var(--color-text);
+}
+
+.SearchResults-search {
+	flex: 0 0 auto;
+	height: 2.75rem;
+	box-sizing: border-box;
+	padding-left: 1.5rem;
+	padding-right: 1.5rem;
 }
 
 .SearchResults-title {
@@ -267,13 +295,19 @@
 		flex-wrap: wrap;
 	}
 
-	.SearchResults-input,
+	.SearchResults-field {
+		flex: 1 1 calc(50% - 0.75rem);
+		min-width: 0;
+	}
+
 	.SearchResults-search {
-		font-size: 16px;
+		flex: 1 1 auto;
 	}
 
 	.SearchResults-toggleOption {
 		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.SearchResults-page--list .SearchResults-mapContainer {
