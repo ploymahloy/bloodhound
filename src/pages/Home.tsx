@@ -91,7 +91,7 @@ export function Home() {
 							id='home-city'
 							name='city'
 							type='text'
-							placeholder='Enter a city, state, or zip code'
+							placeholder='City, state, or zip (or leave blank for nearby listings)'
 							autoComplete='off'
 							value={city}
 							onChange={e => {

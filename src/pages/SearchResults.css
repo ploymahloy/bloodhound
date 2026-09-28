@@ -131,11 +131,11 @@
 	margin: 0.25rem 0 0;
 }
 
-.SearchResults-muted {
+.SearchResults-message {
 	width: fit-content;
 	margin: 2rem auto 0;
 	padding: 0 1.5rem;
-	color: var(--color-text-disabled);
+	color: var(--color-text);
 }
 
 .SearchResults-avatar {
