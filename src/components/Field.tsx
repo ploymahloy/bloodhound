@@ -10,7 +10,7 @@ export interface FieldProps
   children: React.ReactNode
 }
 
-export function Field({
+export const Field = ({
   label,
   hint,
   error = false,
@@ -19,7 +19,7 @@ export function Field({
   className,
   children,
   ...props
-}: FieldProps) {
+}: FieldProps) => {
   return (
     <div className={cn('uk-field', className)} {...props}>
       {label != null && (

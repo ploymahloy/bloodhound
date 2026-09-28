@@ -6,12 +6,12 @@ export interface ItemActiveProps
   children: React.ReactNode
 }
 
-export function ItemActive({
+export const ItemActive = ({
   active = false,
   className,
   children,
   ...props
-}: ItemActiveProps) {
+}: ItemActiveProps) => {
   return (
     <div
       className={cn(

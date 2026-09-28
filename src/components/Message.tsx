@@ -13,11 +13,11 @@ const variantClass: Record<MessageVariant, string> = {
   error: 'uk-message--error',
 }
 
-export function Message({
+export const Message = ({
   variant,
   className,
   children,
-}: MessageProps) {
+}: MessageProps) => {
   return (
     <span className={cn(variantClass[variant], className)}>
       {children}

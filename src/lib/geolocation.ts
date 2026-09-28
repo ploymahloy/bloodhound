@@ -13,13 +13,13 @@ export type GeolocationResult =
  * Requests the user's position via the HTML5 Geolocation API.
  * Resolves once (success or failure); does not watch continuous updates.
  */
-export function requestCurrentPosition(
+export const requestCurrentPosition = (
 	options: PositionOptions = {
 		enableHighAccuracy: false,
 		timeout: 10_000,
 		maximumAge: 60_000
 	}
-): Promise<GeolocationResult> {
+): Promise<GeolocationResult> => {
 	if (typeof navigator === 'undefined' || !navigator.geolocation) {
 		return Promise.resolve({ status: 'unavailable', reason: 'unsupported' });
 	}
@@ -44,4 +44,4 @@ export function requestCurrentPosition(
 			options
 		);
 	});
-}
+};

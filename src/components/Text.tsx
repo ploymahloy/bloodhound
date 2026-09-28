@@ -5,12 +5,12 @@ export interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
   children: React.ReactNode
 }
 
-export function Text({
+export const Text = ({
   disabled = false,
   className,
   children,
   ...props
-}: TextProps) {
+}: TextProps) => {
   return (
     <p
       className={cn(disabled && 'text-disabled', className)}

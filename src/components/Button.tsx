@@ -22,7 +22,7 @@ const sizeClass: Record<ButtonSize, string> = {
   lg: 'uk-btn--lg',
 }
 
-export function Button({
+export const Button = ({
   className,
   variant = 'primary',
   size = 'md',
@@ -30,7 +30,7 @@ export function Button({
   children,
   ref,
   ...props
-}: ButtonProps) {
+}: ButtonProps) => {
   return (
     <button
       ref={ref}

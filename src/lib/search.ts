@@ -283,30 +283,30 @@ const MOCK_LISTINGS: SearchResultItem[] = [
 	}
 ];
 
-function normalizeCityToken(value: string) {
+const normalizeCityToken = (value: string) => {
 	return value.split(',')[0]?.trim().toLowerCase() ?? '';
-}
+};
 
-function matchesCity(item: SearchResultItem, city: string) {
+const matchesCity = (item: SearchResultItem, city: string) => {
 	const needle = normalizeCityToken(city);
 	if (!needle) return true;
 	return normalizeCityToken(item.city) === needle;
-}
+};
 
-function matchesQuery(item: SearchResultItem, q: string) {
+const matchesQuery = (item: SearchResultItem, q: string) => {
 	const needle = q.trim().toLowerCase();
 	if (!needle) return true;
 	const haystack = [item.name, item.service, ...(item.services ?? [])].join(' ').toLowerCase();
 	return haystack.includes(needle);
-}
+};
 
 const EARTH_RADIUS_MILES = 3958.8;
 
 /** Great-circle distance in miles between two WGS84 points. */
-export function distanceMiles(
+export const distanceMiles = (
 	from: { latitude: number; longitude: number },
 	to: { latitude: number; longitude: number }
-) {
+) => {
 	const toRad = (degrees: number) => (degrees * Math.PI) / 180;
 	const dLat = toRad(to.latitude - from.latitude);
 	const dLon = toRad(to.longitude - from.longitude);
@@ -315,20 +315,20 @@ export function distanceMiles(
 	const a =
 		Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
 	return 2 * EARTH_RADIUS_MILES * Math.asin(Math.sqrt(a));
-}
+};
 
-function matchesNear(item: SearchResultItem, near: SearchNear | undefined) {
+const matchesNear = (item: SearchResultItem, near: SearchNear | undefined) => {
 	if (!near) return true;
 	const radius = near.radiusMiles ?? DEFAULT_NEAR_RADIUS_MILES;
 	return distanceMiles(near, item) <= radius;
-}
+};
 
 /**
  * Returns listings that match every provided query param.
  * When city is empty and `near` is set, results are limited to that radius (default 25 mi).
  * Swap this body for a fetch of the same { q, city, near } when an API exists.
  */
-export function searchListings(query: SearchQuery): SearchResultItem[] {
+export const searchListings = (query: SearchQuery): SearchResultItem[] => {
 	const q = query.q?.trim() ?? '';
 	const city = query.city?.trim() ?? '';
 	if (!q && !city) return [];
@@ -339,17 +339,17 @@ export function searchListings(query: SearchQuery): SearchResultItem[] {
 		item =>
 			matchesCity(item, city) && matchesQuery(item, q) && matchesNear(item, useNear ? query.near : undefined)
 	);
-}
+};
 
 export const NASHVILLE_CENTER: [number, number] = [36.1627, -86.7816];
 export const US_FALLBACK_CENTER: [number, number] = [39.8283, -98.5795];
 
-export function getSearchMapFallbackCenter(
+export const getSearchMapFallbackCenter = (
 	city: string,
 	near?: Pick<SearchNear, 'latitude' | 'longitude'>
-): [number, number] {
+): [number, number] => {
 	if (near) return [near.latitude, near.longitude];
 	const token = normalizeCityToken(city);
 	if (!token || token === 'nashville') return NASHVILLE_CENTER;
 	return US_FALLBACK_CENTER;
-}
+};

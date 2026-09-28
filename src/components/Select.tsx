@@ -15,20 +15,20 @@ export interface SelectProps
   ref?: React.Ref<HTMLSelectElement>
 }
 
-function normalizeOptions(
+const normalizeOptions = (
   options: SelectOption[] | string[]
-): SelectOption[] {
+): SelectOption[] => {
   return options.map((opt) =>
     typeof opt === 'string' ? { value: opt, label: opt } : opt
   )
 }
 
-export function Select({
+export const Select = ({
   className,
   options,
   ref,
   ...props
-}: SelectProps) {
+}: SelectProps) => {
   const items = normalizeOptions(options)
   return (
     <select

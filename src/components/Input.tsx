@@ -14,12 +14,12 @@ const stateClass: Record<InputState, string> = {
   error: 'uk-input--error',
 }
 
-export function Input({
+export const Input = ({
   className,
   state = 'default',
   ref,
   ...props
-}: InputProps) {
+}: InputProps) => {
   return (
     <input
       ref={ref}
