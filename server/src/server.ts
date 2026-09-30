@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express, { Application, Request, Response } from 'express';
 import { getRandomInt } from 'trng-crypto';
 
@@ -7,26 +8,9 @@ getRandomInt(10); // 1845327456n
 getRandomInt(100); // 6934718900905400457134776369343709480969619164893508370415330363170507657738911606749154352850444764n
 
 const app: Application = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
-app.listen(PORT, () => {
-	console.log(`Server is running on http://localhost:${PORT}`);
-});
-
-function setLocationCorsHeaders(res: Response): void {
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-	res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-}
-
-app.options('/location', (_, res: Response) => {
-	setLocationCorsHeaders(res);
-	res.sendStatus(204);
-});
-
-app.get('/location', (req: Request, res: Response) => {
-	setLocationCorsHeaders(res);
-
+app.get('/api/location', (req: Request, res: Response) => {
 	const { latitude: latStr, longitude: lngStr } = req.query;
 
 	if (latStr === undefined || lngStr === undefined) {
@@ -53,4 +37,8 @@ app.get('/location', (req: Request, res: Response) => {
 		longitude,
 		name: 'Yeah, Buddy!'
 	});
+});
+
+app.listen(PORT, () => {
+	console.log(`Server is running on http://localhost:${PORT}`);
 });
