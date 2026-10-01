@@ -1,14 +1,14 @@
 import 'dotenv/config';
 import express, { Application, Request, Response } from 'express';
-import { getRandomInt } from 'trng-crypto';
-
-getRandomInt(1); // 2n
-getRandomInt(5); // 99948n
-getRandomInt(10); // 1845327456n
-getRandomInt(100); // 6934718900905400457134776369343709480969619164893508370415330363170507657738911606749154352850444764n
 
 const app: Application = express();
 const PORT = Number(process.env.PORT) || 3000;
+
+app.get('/', (_, res: Response) => {
+	res.status(200).json({
+		status: 'ok'
+	});
+});
 
 app.get('/api/location', (req: Request, res: Response) => {
 	const { latitude: latStr, longitude: lngStr } = req.query;
