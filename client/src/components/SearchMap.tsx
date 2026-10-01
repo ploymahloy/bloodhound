@@ -40,12 +40,12 @@ const pinIconSelected = L.divIcon({
 	html: '<span class="SearchMap-pinDot"></span>'
 });
 
-function prefersReducedMotion() {
+const prefersReducedMotion = () => {
 	if (typeof window === 'undefined') return false;
 	return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
+};
 
-function FitBounds({
+const FitBounds = ({
 	items,
 	selectedId,
 	fallbackCenter
@@ -53,7 +53,7 @@ function FitBounds({
 	items: SearchMapItem[];
 	selectedId: string | null;
 	fallbackCenter: [number, number];
-}) {
+}) => {
 	const map = useMap();
 	const boundsKey = items.map(item => `${item.id}:${item.latitude}:${item.longitude}`).join('|');
 	const fallbackKey = `${fallbackCenter[0]},${fallbackCenter[1]}`;
@@ -79,9 +79,9 @@ function FitBounds({
 	}, [map, selectedId, items]);
 
 	return null;
-}
+};
 
-function InvalidateOnResize() {
+const InvalidateOnResize = () => {
 	const map = useMap();
 
 	useEffect(() => {
@@ -95,9 +95,9 @@ function InvalidateOnResize() {
 	}, [map]);
 
 	return null;
-}
+};
 
-export function SearchMap({ items, selectedId, fallbackCenter = US_FALLBACK_CENTER, onSelect }: SearchMapProps) {
+export const SearchMap = ({ items, selectedId, fallbackCenter = US_FALLBACK_CENTER, onSelect }: SearchMapProps) => {
 	return (
 		<div className='SearchMap'>
 			<MapContainer

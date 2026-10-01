@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Navbar } from './components';
 import { Home, SearchResults } from './pages';
 
-function App() {
+const App = () => {
 	return (
 		<>
 			<Navbar />
@@ -12,6 +12,6 @@ function App() {
 			</Routes>
 		</>
 	);
-}
+};
 
 export default App;

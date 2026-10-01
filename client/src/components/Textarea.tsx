@@ -14,12 +14,12 @@ const stateClass: Record<TextareaState, string> = {
   error: 'uk-input--error',
 }
 
-export function Textarea({
+export const Textarea = ({
   className,
   state = 'default',
   ref,
   ...props
-}: TextareaProps) {
+}: TextareaProps) => {
   return (
     <textarea
       ref={ref}

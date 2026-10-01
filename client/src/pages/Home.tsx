@@ -6,7 +6,7 @@ import './Home.css';
 
 const ROTATE_INTERVAL_MS = 2800;
 
-export function Home() {
+export const Home = () => {
 	const navigate = useNavigate();
 	const [termIndex, setTermIndex] = useState(0);
 	const [query, setQuery] = useState('');
@@ -27,12 +27,12 @@ export function Home() {
 
 	const currentTerm = SEARCH_HEADLINE_TERMS[termIndex];
 
-	function fillKeywordFromTerm() {
+	const fillKeywordFromTerm = () => {
 		setQuery(currentTerm);
 		setShowEmptyError(false);
-	}
+	};
 
-	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const qValue = query.trim();
 		const cityValue = city.trim();
@@ -46,7 +46,7 @@ export function Home() {
 		if (qValue) params.set('q', qValue);
 		if (cityValue) params.set('city', cityValue);
 		navigate(`/search?${params.toString()}`);
-	}
+	};
 
 	return (
 		<div className='Home-page'>
@@ -91,7 +91,7 @@ export function Home() {
 							id='home-city'
 							name='city'
 							type='text'
-							placeholder='Enter a city, state, or zip code'
+							placeholder='City, state, or zip (or leave blank for nearby listings)'
 							autoComplete='off'
 							value={city}
 							onChange={e => {

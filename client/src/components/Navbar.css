@@ -21,7 +21,6 @@ body:has(.Navbar-drawer--open) {
 	font-weight: 400;
 	color: var(--color-text-heading);
 	text-decoration: none;
-	margin-left: 0.75rem;
 }
 
 .Navbar-brand:hover {

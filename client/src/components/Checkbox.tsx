@@ -6,13 +6,13 @@ export interface CheckboxProps
   ref?: React.Ref<HTMLInputElement>
 }
 
-export function Checkbox({
+export const Checkbox = ({
   className,
   label,
   id,
   ref,
   ...props
-}: CheckboxProps) {
+}: CheckboxProps) => {
   const inputId = id ?? `checkbox-${Math.random().toString(36).slice(2)}`
   return (
     <label className="uk-label" htmlFor={inputId}>

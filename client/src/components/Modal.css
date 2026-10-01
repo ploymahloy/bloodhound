@@ -4,15 +4,15 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 16px;
+	padding: 1rem;
 	background-color: rgba(10, 10, 10, 0.7);
 	z-index: 50;
 }
 
 .Modal-dialog {
 	width: 100%;
-	max-width: 480px;
-	max-height: 90vh;
+	max-width: 30rem;
+	max-height: 90dvh;
 	display: flex;
 	flex-direction: column;
 	border-radius: var(--border-radius-xl);
@@ -24,7 +24,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 16px 20px;
+	padding: 1rem 1.25rem;
 	border-bottom: 1px solid rgba(148, 163, 184, 0.35);
 }
 
@@ -43,8 +43,8 @@
 	line-height: 1;
 	cursor: pointer;
 	border-radius: 999px;
-	width: 36px;
-	height: 36px;
+	width: 2.25rem;
+	height: 2.25rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -56,22 +56,22 @@
 }
 
 .Modal-body {
-	padding: 16px 20px 20px;
+	padding: 1rem 1.25rem 1.25rem;
 	overflow-y: auto;
 }
 
 @media (max-width: 600px) {
 	.Modal-dialog {
 		max-width: 100%;
-		max-height: 95vh;
+		max-height: 95dvh;
 		border-radius: var(--border-radius-lg);
 	}
 
 	.Modal-header {
-		padding: 14px 16px;
+		padding: 0.875rem 1rem;
 	}
 
 	.Modal-body {
-		padding: 14px 16px 18px;
+		padding: 0.875rem 1rem 1.125rem;
 	}
 }

@@ -6,22 +6,22 @@ import './Navbar.css';
 
 const MENU_ID = 'navbar-menu';
 
-export function Navbar() {
+export const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
 
-	function closeMenu() {
+	const closeMenu = () => {
 		setIsOpen(false);
-	}
+	};
 
-	function toggleMenu() {
+	const toggleMenu = () => {
 		setIsOpen(open => !open);
-	}
+	};
 
-	function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+	const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
 		if (event.key === 'Escape' && isOpen) {
 			closeMenu();
 		}
-	}
+	};
 
 	return (
 		<div onKeyDown={handleKeyDown}>

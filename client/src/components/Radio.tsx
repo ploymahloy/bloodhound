@@ -6,13 +6,13 @@ export interface RadioProps
   ref?: React.Ref<HTMLInputElement>
 }
 
-export function Radio({
+export const Radio = ({
   className,
   label,
   id,
   ref,
   ...props
-}: RadioProps) {
+}: RadioProps) => {
   const inputId =
     id ?? `radio-${Math.random().toString(36).slice(2)}`
   return (

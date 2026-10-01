@@ -11,15 +11,15 @@ export type ModalProps = {
 	children: ReactNode;
 };
 
-export function Modal({ isOpen, onClose, title, className, children }: ModalProps) {
+export const Modal = ({ isOpen, onClose, title, className, children }: ModalProps) => {
 	useEffect(() => {
 		if (!isOpen) return;
 
-		function handleKeyDown(event: KeyboardEvent) {
+		const handleKeyDown = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
 				onClose();
 			}
-		}
+		};
 
 		window.addEventListener('keydown', handleKeyDown);
 		return () => window.removeEventListener('keydown', handleKeyDown);
@@ -52,4 +52,4 @@ export function Modal({ isOpen, onClose, title, className, children }: ModalProp
 			</div>
 		</div>
 	);
-}
+};

@@ -4,6 +4,12 @@ import { Grid2x2, Map } from 'lucide-react';
 import { Button, Field, Input, Modal, SearchMap, Select, Text } from '../components';
 import { cn } from '../lib/cn';
 import {
+	requestCurrentPosition,
+	type GeolocationCoords,
+	type GeolocationResult
+} from '../lib/geolocation';
+import {
+	DEFAULT_NEAR_RADIUS_MILES,
 	getSearchMapFallbackCenter,
 	searchListings,
 	type SearchResultItem
@@ -11,20 +17,21 @@ import {
 import { SEARCH_CATEGORY_OPTIONS } from '../lib/searchCategories';
 import './SearchResults.css';
 
-function truncate(value: string, maxLength: number) {
+const truncate = (value: string, maxLength: number) => {
 	if (value.length <= maxLength) return value;
 	return `${value.slice(0, maxLength)}…`;
-}
+};
 
-function getResultsTitle(q: string, city: string) {
+const getResultsTitle = (q: string, city: string, usingNearYou: boolean) => {
 	const qDisplay = truncate(q, 25);
 	const cityDisplay = truncate(city, 25);
 	if (q && city) return `Results for “${qDisplay}” in “${cityDisplay}”`;
+	if (q && usingNearYou) return `Results for “${qDisplay}” within ${DEFAULT_NEAR_RADIUS_MILES} miles`;
 	if (q) return `Results for “${qDisplay}”`;
 	return `Results for “${cityDisplay}”`;
-}
+};
 
-function Avatar({ item }: { item: SearchResultItem }) {
+const Avatar = ({ item }: { item: SearchResultItem }) => {
 	const initial = item.name.charAt(0).toUpperCase();
 	return (
 		<div className={cn('uk-border', 'SearchResults-avatar')}>
@@ -33,16 +40,16 @@ function Avatar({ item }: { item: SearchResultItem }) {
 				: <span className='SearchResults-avatarInitial'>{initial}</span>}
 		</div>
 	);
-}
+};
 
-function categoryOptionValue(raw: string) {
+const categoryOptionValue = (raw: string) => {
 	const needle = raw.trim().toLowerCase();
 	if (!needle) return '';
 	const match = SEARCH_CATEGORY_OPTIONS.find(option => option.value.toLowerCase() === needle);
 	return match?.value ?? '';
-}
+};
 
-export function SearchResults() {
+export const SearchResults = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [mobileView, setMobileView] = useState<'list' | 'map'>('list');
 	const [selectedProfile, setSelectedProfile] = useState<SearchResultItem | null>(null);
@@ -51,21 +58,52 @@ export function SearchResults() {
 	const [query, setQuery] = useState('');
 	const [cityInput, setCityInput] = useState('');
 	const [showEmptyError, setShowEmptyError] = useState(false);
+	const [userLocation, setUserLocation] = useState<GeolocationResult>({ status: 'idle' });
 	const listItemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 	const q = searchParams.get('q') ?? '';
 	const city = searchParams.get('city') ?? '';
 	const hasSearch = Boolean(q.trim() || city.trim());
-	const results = useMemo(
-		() => (hasSearch ? searchListings({ q, city }) : []),
-		[hasSearch, city, q]
+	const needsUserLocation = hasSearch && !city.trim();
+	const nearCoords: GeolocationCoords | undefined =
+		userLocation.status === 'ready' ? userLocation.coords : undefined;
+	const locationPending = needsUserLocation && (userLocation.status === 'idle' || userLocation.status === 'pending');
+	const locationUnavailable = needsUserLocation && userLocation.status === 'unavailable';
+	const results = useMemo(() => {
+		if (!hasSearch) return [];
+		if (needsUserLocation && !nearCoords) return [];
+		return searchListings({
+			q,
+			city,
+			near: nearCoords ? { ...nearCoords, radiusMiles: DEFAULT_NEAR_RADIUS_MILES } : undefined
+		});
+	}, [hasSearch, needsUserLocation, nearCoords, city, q]);
+	const mapFallbackCenter = useMemo(
+		() => getSearchMapFallbackCenter(city, nearCoords),
+		[city, nearCoords]
 	);
-	const mapFallbackCenter = useMemo(() => getSearchMapFallbackCenter(city), [city]);
 
 	useEffect(() => {
 		setQuery(categoryOptionValue(q));
 		setCityInput(city);
 		setShowEmptyError(false);
 	}, [q, city]);
+
+	useEffect(() => {
+		if (!needsUserLocation) {
+			setUserLocation({ status: 'idle' });
+			return;
+		}
+
+		let cancelled = false;
+		setUserLocation({ status: 'pending' });
+		void requestCurrentPosition().then(result => {
+			if (!cancelled) setUserLocation(result);
+		});
+
+		return () => {
+			cancelled = true;
+		};
+	}, [needsUserLocation, q]);
 
 	useEffect(() => {
 		if (typeof window === 'undefined') return;
@@ -91,22 +129,22 @@ export function SearchResults() {
 		listItemRefs.current[highlightedId]?.scrollIntoView({ block: 'nearest' });
 	}, [highlightedId]);
 
-	function openProfile(item: SearchResultItem) {
+	const openProfile = (item: SearchResultItem) => {
 		setHighlightedId(item.id);
 		setSelectedProfile(item);
 		setIsProfileModalOpen(true);
-	}
+	};
 
-	function closeProfile() {
+	const closeProfile = () => {
 		setIsProfileModalOpen(false);
-	}
+	};
 
-	function handleMapSelect(item: { id: string }) {
+	const handleMapSelect = (item: { id: string }) => {
 		const match = results.find(result => result.id === item.id);
 		if (match) openProfile(match);
-	}
+	};
 
-	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const qValue = query.trim();
 		const cityValue = cityInput.trim();
@@ -120,7 +158,7 @@ export function SearchResults() {
 		if (qValue) next.q = qValue;
 		if (cityValue) next.city = cityValue;
 		setSearchParams(next);
-	}
+	};
 
 	return (
 		<div
@@ -155,7 +193,7 @@ export function SearchResults() {
 						id='search-city'
 						name='city'
 						type='text'
-						placeholder='Enter a city, state, or zip code'
+						placeholder='City, state, or zip (or leave blank for nearby)'
 						autoComplete='off'
 						value={cityInput}
 						onChange={e => {
@@ -181,10 +219,22 @@ export function SearchResults() {
 			</form>
 
 			{/* List + Map */}
-			{hasSearch && (
+			{hasSearch && locationPending && (
+				<Text className='SearchResults-message'>Finding listings near you…</Text>
+			)}
+
+			{hasSearch && locationUnavailable && (
+				<Text className='SearchResults-message'>
+					Location access is needed to search nearby. Allow location or enter a city.
+				</Text>
+			)}
+
+			{hasSearch && !locationPending && !locationUnavailable && (
 				<div className='SearchResults-content'>
 					<div className='SearchResults-listContainer'>
-						<h1 className='SearchResults-title'>{getResultsTitle(q, city)}</h1>
+						<h1 className='SearchResults-title'>
+							{getResultsTitle(q, city, Boolean(nearCoords))}
+						</h1>
 						<div className='SearchResults-list'>
 							{results.map(item => (
 								<button
@@ -213,7 +263,7 @@ export function SearchResults() {
 								</button>
 							))}
 						</div>
-						{results.length === 0 && <Text className='SearchResults-muted'>No results.</Text>}
+						{results.length === 0 && <Text className='SearchResults-message'>No results.</Text>}
 					</div>
 
 					<div className='SearchResults-mapContainer'>
@@ -228,7 +278,7 @@ export function SearchResults() {
 			)}
 
 			{!hasSearch && (
-				<Text className='SearchResults-muted'>Enter what you’re looking for or a city to see results.</Text>
+				<Text className='SearchResults-message'>Enter what you’re looking for or a city to see results.</Text>
 			)}
 
 			<Modal
