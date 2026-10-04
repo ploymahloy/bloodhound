@@ -124,6 +124,22 @@ body:has(.Navbar-drawer--open) {
 	border-left-color: var(--color-accent);
 }
 
+.Navbar-user {
+	display: block;
+	padding: 0.75rem 1rem;
+	color: var(--color-text-muted);
+	font-size: 0.9rem;
+}
+
+.Navbar-logout {
+	width: 100%;
+	border: none;
+	background: transparent;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.Navbar-overlay,
 	.Navbar-drawer,

@@ -1,10 +1,22 @@
-import 'dotenv/config';
+import './env';
 import express, { Application, NextFunction, Request, Response } from 'express';
+import passport from 'passport';
 import { prisma } from './lib/prisma';
 import { searchListings, type SearchNear } from './lib/search';
+import { configurePassport, toPublicUser } from './lib/auth/passport';
+import { createAuthRouter } from './lib/auth/routes';
+import { createSessionMiddleware } from './lib/auth/session';
+import './lib/auth/types';
 
 const app: Application = express();
 const PORT = Number(process.env.PORT) || 3000;
+
+configurePassport();
+
+app.use(express.json());
+app.use(createSessionMiddleware());
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get('/', (_, res: Response) => {
 	res.status(200).json({
@@ -32,6 +44,16 @@ app.get('/api/health', async (_req: Request, res: Response) => {
 		});
 	}
 });
+
+app.get('/api/me', (req: Request, res: Response) => {
+	if (!req.isAuthenticated?.() || !req.user) {
+		res.status(401).json({ error: 'Unauthorized' });
+		return;
+	}
+	res.status(200).json({ user: toPublicUser(req.user) });
+});
+
+app.use('/api/auth', createAuthRouter());
 
 const readQuery = (value: unknown): string => {
 	if (typeof value === 'string') return value;

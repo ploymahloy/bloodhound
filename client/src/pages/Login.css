@@ -1,0 +1,56 @@
+.Login-page {
+	min-height: 100dvh;
+	max-width: 1280px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: safe center;
+	padding: 7rem 1.25rem 1.5rem;
+}
+
+.Login-panel {
+	width: 100%;
+	max-width: 28rem;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 1rem;
+	text-align: center;
+}
+
+.Login-brand {
+	font-family: 'Alfa Slab One', 'Impact', 'Rockwell Extra Bold', 'Arial Black', serif;
+	font-size: clamp(2.5rem, 1rem + 6vw, 3.5rem);
+	font-weight: 400;
+	line-height: 1.1;
+	color: var(--color-text-heading);
+	text-decoration: none;
+}
+
+.Login-brand:hover {
+	color: var(--color-accent);
+}
+
+.Login-tagline {
+	margin: 0;
+	font-size: 1.05rem;
+	line-height: 1.45;
+	color: var(--color-text-muted);
+}
+
+.Login-error {
+	margin: 0;
+	color: var(--color-error);
+	font-size: 0.95rem;
+}
+
+.Login-google {
+	width: 100%;
+	margin-top: 0.5rem;
+}
+
+.Login-status {
+	color: var(--color-text-muted);
+	text-align: center;
+}

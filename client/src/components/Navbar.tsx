@@ -2,12 +2,14 @@ import { useState, type KeyboardEvent } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { cn } from '../lib/cn';
+import { useAuth } from '../lib/auth';
 import './Navbar.css';
 
 const MENU_ID = 'navbar-menu';
 
 export const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
+	const { user, status, logout } = useAuth();
 
 	const closeMenu = () => {
 		setIsOpen(false);
@@ -21,6 +23,10 @@ export const Navbar = () => {
 		if (event.key === 'Escape' && isOpen) {
 			closeMenu();
 		}
+	};
+
+	const handleLogout = () => {
+		void logout().then(closeMenu);
 	};
 
 	return (
@@ -76,18 +82,24 @@ export const Navbar = () => {
 							onClick={closeMenu}>
 							Health
 						</NavLink>
-						<a
-							href='#'
-							className='Navbar-link'
-							onClick={event => {
-								event.preventDefault();
-								closeMenu();
-							}}>
-							Log In
-						</a>
+						{status === 'authenticated' && user ? (
+							<>
+								<span className='Navbar-user'>{user.username}</span>
+								<button type='button' className='Navbar-link Navbar-logout' onClick={handleLogout}>
+									Log Out
+								</button>
+							</>
+						) : (
+							<NavLink
+								to='/login'
+								className={({ isActive }) => cn('Navbar-link', isActive && 'Navbar-link--active')}
+								onClick={closeMenu}>
+								Log In
+							</NavLink>
+						)}
 					</nav>
 				)}
 			</aside>
 		</div>
 	);
-}
+};
