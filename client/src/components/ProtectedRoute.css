@@ -1,0 +1,12 @@
+.ProtectedRoute-page {
+	min-height: 100dvh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 7rem 1.25rem 1.5rem;
+}
+
+.ProtectedRoute-status {
+	color: var(--color-text-muted);
+	text-align: center;
+}

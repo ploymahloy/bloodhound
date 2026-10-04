@@ -84,6 +84,12 @@ export const Navbar = () => {
 						</NavLink>
 						{status === 'authenticated' && user ? (
 							<>
+								<NavLink
+									to='/listings/new'
+									className={({ isActive }) => cn('Navbar-link', isActive && 'Navbar-link--active')}
+									onClick={closeMenu}>
+									Add Listing
+								</NavLink>
 								<span className='Navbar-user'>{user.username}</span>
 								<button type='button' className='Navbar-link Navbar-logout' onClick={handleLogout}>
 									Log Out

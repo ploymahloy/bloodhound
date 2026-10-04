@@ -4,8 +4,10 @@ import passport from 'passport';
 import { prisma } from './lib/prisma';
 import { searchListings, type SearchNear } from './lib/search';
 import { configurePassport, toPublicUser } from './lib/auth/passport';
+import { requireAuth } from './lib/auth/requireAuth';
 import { createAuthRouter } from './lib/auth/routes';
 import { createSessionMiddleware } from './lib/auth/session';
+import { createListingForUser } from './lib/listings';
 import './lib/auth/types';
 
 const app: Application = express();
@@ -54,6 +56,20 @@ app.get('/api/me', (req: Request, res: Response) => {
 });
 
 app.use('/api/auth', createAuthRouter());
+
+app.post('/api/listings', requireAuth, async (req: Request, res: Response) => {
+	try {
+		const result = await createListingForUser(req.user!.id, req.body ?? {});
+		if (!result.ok) {
+			res.status(400).json({ error: result.error });
+			return;
+		}
+		res.status(201).json(result.listing);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: 'Could not create listing' });
+	}
+});
 
 const readQuery = (value: unknown): string => {
 	if (typeof value === 'string') return value;
