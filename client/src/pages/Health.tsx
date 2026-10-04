@@ -27,15 +27,14 @@ export const Health = () => {
 			if (!response.ok) {
 				setState({
 					kind: 'error',
-					message: data.error ?? `Request failed (${response.status})`,
+					message: 'Database unreachable',
 					data,
 				});
 				return;
 			}
 			setState({ kind: 'ok', data });
-		} catch (error) {
-			const message = error instanceof Error ? error.message : 'Failed to reach API';
-			setState({ kind: 'error', message });
+		} catch {
+			setState({ kind: 'error', message: 'Database unreachable' });
 		}
 	};
 

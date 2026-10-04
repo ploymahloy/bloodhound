@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import express, { Application, Request, Response } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import { prisma } from './lib/prisma';
 import { searchListings, type SearchNear } from './lib/search';
 
@@ -22,13 +22,13 @@ app.get('/api/health', async (_req: Request, res: Response) => {
 			database: true,
 		});
 	} catch (error) {
-		const message = error instanceof Error ? error.message : 'Database unreachable';
+		console.error(error);
 		res.status(503).json({
 			status: 'error',
 			client: true,
 			api: true,
 			database: false,
-			error: message,
+			error: 'Database unreachable',
 		});
 	}
 });
@@ -117,6 +117,12 @@ app.get('/api/location', (req: Request, res: Response) => {
 		longitude,
 		name: 'Yeah, Buddy!'
 	});
+});
+
+app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+	console.error(err);
+	if (res.headersSent) return;
+	res.status(500).json({ error: 'Something went wrong' });
 });
 
 app.listen(PORT, () => {

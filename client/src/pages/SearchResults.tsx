@@ -103,11 +103,8 @@ export const SearchResults = () => {
 			.then(items => {
 				if (!cancelled) setResultsState({ kind: 'ready', items });
 			})
-			.catch(error => {
-				if (!cancelled) {
-					const message = error instanceof Error ? error.message : 'Search failed';
-					setResultsState({ kind: 'error', message });
-				}
+			.catch(() => {
+				if (!cancelled) setResultsState({ kind: 'error', message: 'Search failed' });
 			});
 
 		return () => {

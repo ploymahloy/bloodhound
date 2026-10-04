@@ -53,14 +53,7 @@ export const searchListings = async (query: SearchQuery): Promise<SearchResultIt
 
 	const response = await fetch(`/api/search?${params.toString()}`);
 	if (!response.ok) {
-		let message = `Search failed (${response.status})`;
-		try {
-			const data = (await response.json()) as { error?: string };
-			if (data.error) message = data.error;
-		} catch {
-			// Keep the status message when the body is not JSON.
-		}
-		throw new Error(message);
+		throw new Error('Search failed');
 	}
 
 	return (await response.json()) as SearchResultItem[];
