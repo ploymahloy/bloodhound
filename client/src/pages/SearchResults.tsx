@@ -42,6 +42,12 @@ const Avatar = ({ item }: { item: SearchResultItem }) => {
 	);
 };
 
+type ResultsState =
+	| { kind: 'idle' }
+	| { kind: 'loading' }
+	| { kind: 'ready'; items: SearchResultItem[] }
+	| { kind: 'error'; message: string };
+
 const categoryOptionValue = (raw: string) => {
 	const needle = raw.trim().toLowerCase();
 	if (!needle) return '';
@@ -59,6 +65,7 @@ export const SearchResults = () => {
 	const [cityInput, setCityInput] = useState('');
 	const [showEmptyError, setShowEmptyError] = useState(false);
 	const [userLocation, setUserLocation] = useState<GeolocationResult>({ status: 'idle' });
+	const [resultsState, setResultsState] = useState<ResultsState>({ kind: 'idle' });
 	const listItemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 	const q = searchParams.get('q') ?? '';
 	const city = searchParams.get('city') ?? '';
@@ -68,15 +75,7 @@ export const SearchResults = () => {
 		userLocation.status === 'ready' ? userLocation.coords : undefined;
 	const locationPending = needsUserLocation && (userLocation.status === 'idle' || userLocation.status === 'pending');
 	const locationUnavailable = needsUserLocation && userLocation.status === 'unavailable';
-	const results = useMemo(() => {
-		if (!hasSearch) return [];
-		if (needsUserLocation && !nearCoords) return [];
-		return searchListings({
-			q,
-			city,
-			near: nearCoords ? { ...nearCoords, radiusMiles: DEFAULT_NEAR_RADIUS_MILES } : undefined
-		});
-	}, [hasSearch, needsUserLocation, nearCoords, city, q]);
+	const results = resultsState.kind === 'ready' ? resultsState.items : [];
 	const mapFallbackCenter = useMemo(
 		() => getSearchMapFallbackCenter(city, nearCoords),
 		[city, nearCoords]
@@ -87,6 +86,34 @@ export const SearchResults = () => {
 		setCityInput(city);
 		setShowEmptyError(false);
 	}, [q, city]);
+
+	useEffect(() => {
+		if (!hasSearch || (needsUserLocation && !nearCoords)) {
+			setResultsState({ kind: 'idle' });
+			return;
+		}
+
+		let cancelled = false;
+		setResultsState({ kind: 'loading' });
+		void searchListings({
+			q,
+			city,
+			near: nearCoords ? { ...nearCoords, radiusMiles: DEFAULT_NEAR_RADIUS_MILES } : undefined
+		})
+			.then(items => {
+				if (!cancelled) setResultsState({ kind: 'ready', items });
+			})
+			.catch(error => {
+				if (!cancelled) {
+					const message = error instanceof Error ? error.message : 'Search failed';
+					setResultsState({ kind: 'error', message });
+				}
+			});
+
+		return () => {
+			cancelled = true;
+		};
+	}, [hasSearch, needsUserLocation, nearCoords, city, q]);
 
 	useEffect(() => {
 		if (!needsUserLocation) {
@@ -229,7 +256,15 @@ export const SearchResults = () => {
 				</Text>
 			)}
 
-			{hasSearch && !locationPending && !locationUnavailable && (
+			{hasSearch && !locationPending && !locationUnavailable && resultsState.kind === 'loading' && (
+				<Text className='SearchResults-message'>Searching…</Text>
+			)}
+
+			{hasSearch && !locationPending && !locationUnavailable && resultsState.kind === 'error' && (
+				<Text className='SearchResults-message'>{resultsState.message}</Text>
+			)}
+
+			{hasSearch && !locationPending && !locationUnavailable && resultsState.kind === 'ready' && (
 				<div className='SearchResults-content'>
 					<div className='SearchResults-listContainer'>
 						<h1 className='SearchResults-title'>

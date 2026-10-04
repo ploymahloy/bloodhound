@@ -31,3 +31,28 @@ enum Role {
   USER
   ADMIN
 }
+
+enum ListingType {
+  BUSINESS
+  INDIVIDUAL
+}
+
+model Listing {
+  id        String      @id @default(uuid())
+  name      String
+  type      ListingType
+  service   String
+  services  String[]
+  address   String?
+  city      String
+  phone     String
+  avatarUrl String?
+  promo     String?     @db.Text
+  latitude  Float
+  longitude Float
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([city])
+  @@index([service])
+}

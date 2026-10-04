@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node dist/server.js",
     "dev": "nodemon --watch 'src/**' --ext 'ts,json' --ignore 'src/**/*.spec.ts' --exec 'ts-node src/server.ts'",
-    "build": "prisma generate && tsc"
+    "build": "prisma generate && tsc",
+    "db:seed": "prisma db seed"
   },
   "keywords": [],
   "author": "",
