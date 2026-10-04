@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express, { Application, Request, Response } from 'express';
+import { prisma } from './lib/prisma';
 
 const app: Application = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -8,6 +9,27 @@ app.get('/', (_, res: Response) => {
 	res.status(200).json({
 		status: 'ok'
 	});
+});
+
+app.get('/api/health', async (_req: Request, res: Response) => {
+	try {
+		await prisma.$queryRaw`SELECT 1`;
+		res.status(200).json({
+			status: 'ok',
+			client: true,
+			api: true,
+			database: true,
+		});
+	} catch (error) {
+		const message = error instanceof Error ? error.message : 'Database unreachable';
+		res.status(503).json({
+			status: 'error',
+			client: true,
+			api: true,
+			database: false,
+			error: message,
+		});
+	}
 });
 
 app.get('/api/location', (req: Request, res: Response) => {

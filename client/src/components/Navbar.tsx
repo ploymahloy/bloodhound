@@ -70,6 +70,12 @@ export const Navbar = () => {
 							onClick={closeMenu}>
 							Search
 						</NavLink>
+						<NavLink
+							to='/health'
+							className={({ isActive }) => cn('Navbar-link', isActive && 'Navbar-link--active')}
+							onClick={closeMenu}>
+							Health
+						</NavLink>
 						<a
 							href='#'
 							className='Navbar-link'

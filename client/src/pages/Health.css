@@ -1,0 +1,58 @@
+.Health-page {
+	min-height: 100dvh;
+	max-width: 1280px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: safe center;
+	padding: 7rem 1.25rem 1.5rem;
+}
+
+.Health-panel {
+	width: 100%;
+	max-width: 28rem;
+	margin: 0 auto;
+}
+
+.Health-title {
+	margin: 0 0 0.5rem;
+	font-size: clamp(1.75rem, 0.4rem + 4vw, 2.25rem);
+	font-weight: 600;
+	line-height: 1.2;
+	color: var(--color-text-heading);
+}
+
+.Health-subtitle {
+	margin: 0 0 1.5rem;
+	color: var(--color-text-muted);
+	line-height: 1.5;
+}
+
+.Health-list {
+	list-style: none;
+	margin: 0 0 1.5rem;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.Health-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.75rem 0;
+	border-bottom: 1px solid var(--color-border);
+	color: var(--color-text);
+}
+
+.Health-pending {
+	color: var(--color-text-muted);
+}
+
+.Health-error {
+	margin: 0 0 1.25rem;
+	color: var(--color-error, #ff6b6b);
+	line-height: 1.4;
+}
