@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Field, Input, Select } from '../components';
+import { Button, CityInput, Field, Select } from '../components';
 import { SEARCH_CATEGORY_OPTIONS, SEARCH_HEADLINE_TERMS } from '../lib/searchCategories';
 import './Home.css';
 
@@ -87,15 +87,13 @@ export const Home = () => {
 					</Field>
 
 					<Field className='Home-field' label='City' htmlFor='home-city' srOnlyLabel>
-						<Input
+						<CityInput
 							id='home-city'
 							name='city'
-							type='text'
 							placeholder='City, state, or zip (or leave blank for nearby listings)'
-							autoComplete='off'
 							value={city}
-							onChange={e => {
-								setCity(e.target.value);
+							onValueChange={value => {
+								setCity(value);
 								if (showEmptyError) setShowEmptyError(false);
 							}}
 							className='Home-input'

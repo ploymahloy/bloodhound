@@ -8,6 +8,7 @@ import { requireAuth } from './lib/auth/requireAuth';
 import { createAuthRouter } from './lib/auth/routes';
 import { createSessionMiddleware } from './lib/auth/session';
 import { createListingForUser } from './lib/listings';
+import { suggestPlaces } from './lib/placeSuggest';
 import './lib/auth/types';
 
 const app: Application = express();
@@ -125,6 +126,18 @@ app.get('/api/search', async (req: Request, res: Response) => {
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: 'Search failed' });
+	}
+});
+
+app.get('/api/places/suggest', async (req: Request, res: Response) => {
+	const q = readQuery(req.query.q).trim();
+
+	try {
+		const suggestions = await suggestPlaces(q);
+		res.status(200).json(suggestions);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: 'Could not load suggestions' });
 	}
 });
 

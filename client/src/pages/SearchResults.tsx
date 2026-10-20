@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Grid2x2, Map } from 'lucide-react';
-import { Button, Field, Input, Modal, SearchMap, Select, Text } from '../components';
+import { Button, CityInput, Field, Modal, SearchMap, Select, Text } from '../components';
 import { cn } from '../lib/cn';
 import {
 	requestCurrentPosition,
@@ -213,15 +213,13 @@ export const SearchResults = () => {
 				</Field>
 
 				<Field className='SearchResults-field' label='City' htmlFor='search-city' srOnlyLabel>
-					<Input
+					<CityInput
 						id='search-city'
 						name='city'
-						type='text'
 						placeholder='City, state, or zip (or leave blank for nearby)'
-						autoComplete='off'
 						value={cityInput}
-						onChange={e => {
-							setCityInput(e.target.value);
+						onValueChange={value => {
+							setCityInput(value);
 							if (showEmptyError) setShowEmptyError(false);
 						}}
 						className='SearchResults-input'
