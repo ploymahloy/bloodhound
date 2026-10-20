@@ -1,21 +1,25 @@
-const PHOTON_URL = "https://photon.komoot.io/api/";
+// Open-Meteo's geocoder is keyless and answers in ~0.5s. The public Photon
+// instance we tried first took 4-6s per request, which made typing feel stuck.
+const GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search";
 const MIN_QUERY_LENGTH = 2;
 const MAX_SUGGESTIONS = 8;
-const REQUEST_TIMEOUT_MS = 8_000;
+// Fetch extra rows so we can rank by population before trimming.
+const FETCH_COUNT = 20;
+const REQUEST_TIMEOUT_MS = 5_000;
 const CACHE_TTL_MS = 10 * 60 * 1000;
 const CACHE_MAX_ENTRIES = 500;
 
-type PhotonFeature = {
-  properties?: {
-    name?: string;
-    state?: string;
-    country?: string;
-    countrycode?: string;
-  };
+type GeocodingResult = {
+  name?: string;
+  admin1?: string;
+  country?: string;
+  country_code?: string;
+  feature_code?: string;
+  population?: number;
 };
 
-type PhotonResponse = {
-  features?: PhotonFeature[];
+type GeocodingResponse = {
+  results?: GeocodingResult[];
 };
 
 type CacheEntry = {
@@ -48,18 +52,26 @@ const writeCache = (key: string, suggestions: string[]) => {
   }
 };
 
-const toLabel = (feature: PhotonFeature): string | null => {
-  const props = feature.properties;
-  const name = props?.name?.trim();
+// GeoNames codes: keep populated places, drop neighborhoods and historical/abandoned ones.
+const EXCLUDED_FEATURE_CODES = new Set(["PPLX", "PPLH", "PPLQ", "PPLW"]);
+
+const isCity = (result: GeocodingResult): boolean => {
+  const code = result.feature_code;
+  return Boolean(code?.startsWith("PPL")) && !EXCLUDED_FEATURE_CODES.has(code ?? "");
+};
+
+const toLabel = (result: GeocodingResult): string | null => {
+  const name = result.name?.trim();
   if (!name) return null;
-  const region = props?.countrycode === "US" ? props.state : props?.country;
+  const region = result.country_code === "US" ? result.admin1 : result.country;
   const trimmedRegion = region?.trim();
   return trimmedRegion ? `${name}, ${trimmedRegion}` : name;
 };
 
 /**
  * Returns city suggestions for a partial query, formatted as "City, State"
- * (or "City, Country" outside the US). Returns [] on any failure.
+ * (or "City, Country" outside the US), largest places first.
+ * Returns [] on any failure.
  */
 export const suggestPlaces = async (query: string): Promise<string[]> => {
   const trimmed = query.trim();
@@ -69,11 +81,11 @@ export const suggestPlaces = async (query: string): Promise<string[]> => {
   const cached = readCache(key);
   if (cached) return cached;
 
-  const url = new URL(PHOTON_URL);
-  url.searchParams.set("q", trimmed);
-  url.searchParams.set("limit", String(MAX_SUGGESTIONS));
-  url.searchParams.set("lang", "en");
-  url.searchParams.set("layer", "city");
+  const url = new URL(GEOCODING_URL);
+  url.searchParams.set("name", trimmed);
+  url.searchParams.set("count", String(FETCH_COUNT));
+  url.searchParams.set("language", "en");
+  url.searchParams.set("format", "json");
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
@@ -89,16 +101,27 @@ export const suggestPlaces = async (query: string): Promise<string[]> => {
 
     if (!response.ok) return [];
 
-    const data = (await response.json()) as PhotonResponse;
+    const data = (await response.json()) as GeocodingResponse;
+    // Names starting with what the user typed come first, then biggest places.
+    const startsWithQuery = (result: GeocodingResult) =>
+      result.name?.trim().toLowerCase().startsWith(key) ? 1 : 0;
+    const ranked = (data.results ?? [])
+      .filter(isCity)
+      .sort(
+        (a, b) =>
+          startsWithQuery(b) - startsWithQuery(a) || (b.population ?? 0) - (a.population ?? 0)
+      );
+
     const seen = new Set<string>();
     const suggestions: string[] = [];
-    for (const feature of data.features ?? []) {
-      const label = toLabel(feature);
+    for (const result of ranked) {
+      const label = toLabel(result);
       if (!label) continue;
       const labelKey = label.toLowerCase();
       if (seen.has(labelKey)) continue;
       seen.add(labelKey);
       suggestions.push(label);
+      if (suggestions.length >= MAX_SUGGESTIONS) break;
     }
 
     writeCache(key, suggestions);

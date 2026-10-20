@@ -4,7 +4,7 @@ import { fetchCitySuggestions, MIN_CITY_SUGGEST_LENGTH } from '../lib/placeSugge
 import { Input, type InputProps } from './Input'
 import './CityInput.css'
 
-const DEBOUNCE_MS = 250
+const DEBOUNCE_MS = 150
 
 export interface CityInputProps
   extends Omit<InputProps, 'value' | 'onChange' | 'ref'> {
