@@ -273,6 +273,7 @@ async function main() {
       promo: listing.promo ?? null,
       latitude: listing.latitude,
       longitude: listing.longitude,
+      claimed: true,
     };
 
     await prisma.listing.upsert({

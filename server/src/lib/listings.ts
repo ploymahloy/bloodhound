@@ -113,6 +113,7 @@ export const createListingForUser = async (
       promo,
       latitude: coords.latitude,
       longitude: coords.longitude,
+      claimed: true,
       ownerId,
     },
   });

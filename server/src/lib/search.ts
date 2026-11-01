@@ -88,7 +88,7 @@ const toResult = (
 });
 
 /**
- * Returns listings that match every provided query param.
+ * Returns claimed listings that match every provided query param.
  * When city is empty and `near` is set, results are limited to that radius (default 25 mi).
  */
 export const searchListings = async (query: SearchQuery): Promise<SearchResultItem[]> => {
@@ -96,7 +96,9 @@ export const searchListings = async (query: SearchQuery): Promise<SearchResultIt
   const city = query.city?.trim() ?? "";
   if (!q && !city) return [];
 
-  const listings = await prisma.listing.findMany();
+  const listings = await prisma.listing.findMany({
+    where: { claimed: true },
+  });
   const items = listings.map(toResult);
   const useNear = !city && query.near;
 

@@ -53,6 +53,7 @@ model Listing {
   promo     String?     @db.Text
   latitude  Float
   longitude Float
+  claimed   Boolean     @default(false)
   ownerId   String?
   owner     User?       @relation(fields: [ownerId], references: [id], onDelete: SetNull)
   createdAt DateTime    @default(now())
