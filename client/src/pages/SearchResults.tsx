@@ -22,6 +22,12 @@ const truncate = (value: string, maxLength: number) => {
 	return `${value.slice(0, maxLength)}…`;
 };
 
+const addressQuery = (address: string, city: string) =>
+	[address, city].filter(Boolean).join(', ');
+
+const googleMapsSearchUrl = (name: string) =>
+	`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name)}`;
+
 const getResultsTitle = (q: string, city: string, usingNearYou: boolean) => {
 	const qDisplay = truncate(q, 25);
 	const cityDisplay = truncate(city, 25);
@@ -60,6 +66,8 @@ export const SearchResults = () => {
 	const [mobileView, setMobileView] = useState<'list' | 'map'>('list');
 	const [selectedProfile, setSelectedProfile] = useState<SearchResultItem | null>(null);
 	const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+	const [addressCopied, setAddressCopied] = useState(false);
+	const addressCopyResetRef = useRef<number | null>(null);
 	const [highlightedId, setHighlightedId] = useState<string | null>(null);
 	const [query, setQuery] = useState('');
 	const [cityInput, setCityInput] = useState('');
@@ -146,7 +154,20 @@ export const SearchResults = () => {
 		setIsProfileModalOpen(false);
 		setSelectedProfile(null);
 		setHighlightedId(null);
+		setAddressCopied(false);
+		if (addressCopyResetRef.current !== null) {
+			window.clearTimeout(addressCopyResetRef.current);
+			addressCopyResetRef.current = null;
+		}
 	}, [q, city]);
+
+	useEffect(() => {
+		return () => {
+			if (addressCopyResetRef.current !== null) {
+				window.clearTimeout(addressCopyResetRef.current);
+			}
+		};
+	}, []);
 
 	useEffect(() => {
 		if (!highlightedId) return;
@@ -157,10 +178,34 @@ export const SearchResults = () => {
 		setHighlightedId(item.id);
 		setSelectedProfile(item);
 		setIsProfileModalOpen(true);
+		setAddressCopied(false);
 	};
 
 	const closeProfile = () => {
 		setIsProfileModalOpen(false);
+		setAddressCopied(false);
+		if (addressCopyResetRef.current !== null) {
+			window.clearTimeout(addressCopyResetRef.current);
+			addressCopyResetRef.current = null;
+		}
+	};
+
+	const copyAddress = (address: string, cityName: string) => {
+		void navigator.clipboard
+			.writeText(addressQuery(address, cityName))
+			.then(() => {
+				setAddressCopied(true);
+				if (addressCopyResetRef.current !== null) {
+					window.clearTimeout(addressCopyResetRef.current);
+				}
+				addressCopyResetRef.current = window.setTimeout(() => {
+					setAddressCopied(false);
+					addressCopyResetRef.current = null;
+				}, 2000);
+			})
+			.catch(() => {
+				setAddressCopied(false);
+			});
 	};
 
 	const handleMapSelect = (item: { id: string }) => {
@@ -282,13 +327,9 @@ export const SearchResults = () => {
 									aria-current={highlightedId === item.id ? 'true' : undefined}
 									onClick={() => openProfile(item)}>
 									<Avatar item={item} />
-									<div>
+									<div className='SearchResults-listItemBody'>
 										<Text className='SearchResults-name'>{item.name}</Text>
 										<Text className='SearchResults-service'>{item.service}</Text>
-										{item.type === 'business' && item.address && (
-											<Text className='SearchResults-address'>{item.address}</Text>
-										)}
-										<Text className='SearchResults-phone'>{item.phone}</Text>
 									</div>
 								</button>
 							))}
@@ -326,19 +367,31 @@ export const SearchResults = () => {
 							</div>
 						</div>
 
-						{selectedProfile.promo && (
-							<div className='SearchResults-profilePromo'>
-								<Text className='SearchResults-profilePromoLabel'>Promo</Text>
-								<Text className='SearchResults-profilePromoText'>{selectedProfile.promo}</Text>
-							</div>
-						)}
-
 						<div className='SearchResults-profileContact'>
 							<Text className='SearchResults-profilePromoLabel'>Contact</Text>
 							{selectedProfile.address && (
 								<Text className='SearchResults-profileContactLine'>
 									<span className='SearchResults-profileContactLabel'>Address:</span>
-									<span>{selectedProfile.address}</span>
+									<a
+										className='SearchResults-profileAddressMaps'
+										href={googleMapsSearchUrl(selectedProfile.name)}
+										target='_blank'
+										rel='noopener noreferrer'>
+										{selectedProfile.address}
+									</a>
+									<span className='SearchResults-profileAddressMobile'>
+										<span>{selectedProfile.address}</span>
+										<button
+											type='button'
+											className='SearchResults-profileAddressCopy'
+											onClick={() => {
+												if (selectedProfile.address) {
+													copyAddress(selectedProfile.address, selectedProfile.city);
+												}
+											}}>
+											{addressCopied ? 'Copied' : 'Copy'}
+										</button>
+									</span>
 								</Text>
 							)}
 							<Text className='SearchResults-profileContactLine'>
@@ -347,19 +400,6 @@ export const SearchResults = () => {
 									{selectedProfile.phone}
 								</a>
 							</Text>
-						</div>
-
-						<div className='SearchResults-profileServices'>
-							<Text className='SearchResults-profileSectionTitle'>Services offered</Text>
-							{selectedProfile.services && selectedProfile.services.length > 0 ?
-								<ul className='SearchResults-profileServicesList'>
-									{selectedProfile.services.map(service => (
-										<li key={service} className='SearchResults-profileServiceItem'>
-											{service}
-										</li>
-									))}
-								</ul>
-								: <Text className='SearchResults-profileServiceFallback'>{selectedProfile.service}</Text>}
 						</div>
 					</div>
 				)}

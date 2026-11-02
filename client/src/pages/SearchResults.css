@@ -73,7 +73,7 @@
 
 .SearchResults-service {
 	font-size: 0.875rem;
-	color: var(--color-text);
+	color: var(--color-text-muted);
 	margin: 0.25rem 0 0;
 }
 
@@ -114,21 +114,15 @@
 	background: var(--color-hover-bg);
 }
 
+.SearchResults-listItemBody {
+	flex: 1;
+	min-width: 0;
+}
+
 .SearchResults-name {
 	font-size: 1rem;
 	font-weight: 500;
 	margin: 0;
-}
-
-.SearchResults-address {
-	font-size: 0.875rem;
-	color: var(--color-text-disabled);
-	margin: 0.25rem 0 0;
-}
-
-.SearchResults-phone {
-	font-size: 0.875rem;
-	margin: 0.25rem 0 0;
 }
 
 .SearchResults-message {
@@ -226,20 +220,33 @@
 	color: var(--color-text-muted);
 }
 
-.SearchResults-profileContactLink {
+.SearchResults-profileContactLink,
+.SearchResults-profileAddressMaps {
 	color: var(--color-primary);
 	text-decoration: none;
 }
 
-.SearchResults-profileContactLink:hover {
+.SearchResults-profileContactLink:hover,
+.SearchResults-profileAddressMaps:hover {
 	text-decoration: underline;
 }
 
-.SearchResults-profilePromo {
-	padding: 0.625rem 0.75rem;
-	border-radius: var(--border-radius-lg);
-	background: rgba(8, 73, 8, 0.9);
-	border: 1px solid rgba(56, 248, 78, 0.7);
+.SearchResults-profileAddressMobile {
+	display: none;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.SearchResults-profileAddressCopy {
+	border: 0;
+	padding: 0;
+	background: transparent;
+	color: var(--color-primary);
+	font: inherit;
+	font-size: 0.9rem;
+	cursor: pointer;
+	text-decoration: underline;
 }
 
 .SearchResults-profilePromoLabel {
@@ -248,42 +255,6 @@
 	letter-spacing: 0.05em;
 	text-transform: uppercase;
 	color: var(--color-text-muted);
-}
-
-.SearchResults-profilePromoText {
-	margin: 0;
-	font-size: 0.9rem;
-}
-
-.SearchResults-profileServices {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-}
-
-.SearchResults-profileSectionTitle {
-	margin: 0;
-	font-weight: 500;
-	font-size: 0.95rem;
-}
-
-.SearchResults-profileServicesList {
-	margin: 0;
-	padding-left: 1.25rem;
-	display: flex;
-	flex-direction: column;
-	gap: 0.25rem;
-	font-size: 0.9rem;
-}
-
-.SearchResults-profileServiceItem {
-	margin: 0;
-}
-
-.SearchResults-profileServiceFallback {
-	margin: 0;
-	font-size: 0.9rem;
-	color: var(--color-text);
 }
 
 @media (max-width: 900px) {
@@ -340,8 +311,12 @@
 		padding: 0.625rem;
 	}
 
-	.SearchResults-profilePromo {
-		padding: 0.625rem;
+	.SearchResults-profileAddressMaps {
+		display: none;
+	}
+
+	.SearchResults-profileAddressMobile {
+		display: inline-flex;
 	}
 }
 
