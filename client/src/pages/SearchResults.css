@@ -1,10 +1,10 @@
 .SearchResults-page {
-	height: 100dvh;
+	flex: 1;
+	min-height: 0;
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
-	padding-top: 7rem;
 }
 
 .SearchResults-content {

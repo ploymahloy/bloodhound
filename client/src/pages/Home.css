@@ -1,11 +1,12 @@
 .Home-page {
-	min-height: 100dvh;
+	flex: 1;
+	width: 100%;
 	max-width: 1280px;
 	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
 	justify-content: safe center;
-	padding: 7rem 1.25rem 1.5rem;
+	padding: 0 1.25rem 1.5rem;
 }
 
 .Home-hero {
@@ -98,7 +99,7 @@
 
 @media (min-width: 640px) {
 	.Home-page {
-		padding: 7rem 2rem 2rem;
+		padding: 0 2rem 2rem;
 	}
 
 	.Home-hero {

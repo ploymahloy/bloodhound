@@ -2,16 +2,18 @@ body:has(.Navbar-drawer--open) {
 	overflow: hidden;
 }
 
-.Navbar {
-	position: fixed;
+.Navbar-root {
+	position: sticky;
 	top: 0;
+	flex-shrink: 0;
+	z-index: 1;
+}
+
+.Navbar {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	padding: 1.5rem;
-	height: fit-content;
-	inset-inline: 0;
-	z-index: 1;
 	background: transparent;
 }
 

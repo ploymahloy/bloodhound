@@ -30,7 +30,7 @@ export const Navbar = () => {
 	};
 
 	return (
-		<div onKeyDown={handleKeyDown}>
+		<div className='Navbar-root' onKeyDown={handleKeyDown}>
 			<header className='Navbar'>
 				<NavLink to='/' className='Navbar-brand' end>
 					Bloodhound

@@ -1,9 +1,9 @@
 .ProtectedRoute-page {
-	min-height: 100dvh;
+	flex: 1;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 7rem 1.25rem 1.5rem;
+	padding: 0 1.25rem 1.5rem;
 }
 
 .ProtectedRoute-status {
