@@ -115,6 +115,12 @@
 	cursor: pointer;
 	text-align: left;
 	width: 100%;
+	contain: paint;
+}
+
+.SearchResults-list--scrolling .SearchResults-listItem {
+	pointer-events: none;
+	transition: none;
 }
 
 .SearchResults-listItem:focus-visible,

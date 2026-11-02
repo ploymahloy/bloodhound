@@ -42,7 +42,7 @@ const Avatar = ({ item }: { item: SearchResultItem }) => {
 	return (
 		<div className={cn('uk-border', 'SearchResults-avatar')}>
 			{item.avatarUrl ?
-				<img src={item.avatarUrl} alt='' className='SearchResults-avatarImg' />
+				<img src={item.avatarUrl} alt='' decoding='async' className='SearchResults-avatarImg' />
 				: <span className='SearchResults-avatarInitial'>{initial}</span>}
 		</div>
 	);
@@ -74,6 +74,7 @@ export const SearchResults = () => {
 	const [showEmptyError, setShowEmptyError] = useState(false);
 	const [userLocation, setUserLocation] = useState<GeolocationResult>({ status: 'idle' });
 	const [resultsState, setResultsState] = useState<ResultsState>({ kind: 'idle' });
+	const listRef = useRef<HTMLDivElement | null>(null);
 	const listItemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 	const q = searchParams.get('q') ?? '';
 	const city = searchParams.get('city') ?? '';
@@ -168,6 +169,27 @@ export const SearchResults = () => {
 			}
 		};
 	}, []);
+
+	useEffect(() => {
+		const list = listRef.current;
+		if (!list) return;
+
+		let timer = 0;
+		const onScroll = () => {
+			list.classList.add('SearchResults-list--scrolling');
+			window.clearTimeout(timer);
+			timer = window.setTimeout(() => {
+				list.classList.remove('SearchResults-list--scrolling');
+			}, 120);
+		};
+
+		list.addEventListener('scroll', onScroll, { passive: true });
+		return () => {
+			list.removeEventListener('scroll', onScroll);
+			window.clearTimeout(timer);
+			list.classList.remove('SearchResults-list--scrolling');
+		};
+	}, [resultsState.kind]);
 
 	useEffect(() => {
 		if (!highlightedId) return;
@@ -310,7 +332,7 @@ export const SearchResults = () => {
 						<h1 className='SearchResults-title'>
 							{getResultsTitle(q, city, Boolean(nearCoords))}
 						</h1>
-						<div className='SearchResults-list'>
+						<div className='SearchResults-list' ref={listRef}>
 							{results.map(item => (
 								<button
 									type='button'
